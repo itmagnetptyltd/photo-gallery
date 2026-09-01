@@ -2,10 +2,10 @@
   "stateVersion": 1,
   "toolkit": "itm-sdlc",
   "version": "1.0.0",
-  "commit": "284db02bf48067ddcb248325d79c5aa691507be1",
+  "commit": "0ae171446f1a3ad35c2d1fe863f6e74617505e06",
   "ref": "kcb-dev-v1",
   "remote": "https://github.com/itmagnetptyltd/itm-sdlc.git",
-  "installedAt": "2026-09-01T04:47:18.826Z",
+  "installedAt": "2026-09-01T07:03:54.945Z",
   "modules": [
     "PHOTO"
   ],
@@ -91,6 +91,10 @@
       "sha256": "c017cbab72f23e04298210c49b9f504699cf6c9020cd66901429bded93b091af",
       "policy": "managed"
     },
+    ".claude/skills/slice-add/SKILL.md": {
+      "sha256": "07e18bd01993386baf1a0eb2e83632756c63d86e6add73a076917fcfdbd65d45",
+      "policy": "managed"
+    },
     ".claude/skills/tdd/SKILL.md": {
       "sha256": "a61710d3001661337e7ff75f5d5e811ab5e75a56ba6b0be5ea80c83a696e765f",
       "policy": "managed"
@@ -157,6 +161,10 @@
     },
     ".github/workflows/golden-set.yml": {
       "sha256": "05b8670a2750f74a9415fccaca13aa6167893ad805445db94dc142b915ab405a",
+      "policy": "managed"
+    },
+    ".claude/itm-sdlc/scripts/add-slice.js": {
+      "sha256": "3d69f66eb78afdbdfe406665a340bd72ebf6b6c582a7cd1b721f9abd4e272eed",
       "policy": "managed"
     },
     ".claude/itm-sdlc/scripts/advance-status.js": {
@@ -228,7 +236,7 @@
       "policy": "managed"
     },
     ".claude/itm-sdlc/scripts/lib/installer.js": {
-      "sha256": "45f41c7811e9bbc9a5a349c4eb966d2fbab48b4bda87fcfa681a14d9a82779f2",
+      "sha256": "2fee1ff74785c881e4fc5b012c0625c6ca23aaf3c9a389e1ff8e904266755728",
       "policy": "managed"
     },
     ".claude/itm-sdlc/scripts/lib/requirements.js": {
@@ -348,7 +356,7 @@
       "policy": "seeded"
     },
     ".gitignore": {
-      "sha256": "143dcf1dd0bfaa5ea09fcde008762eec75cc31097787e652df4573a0205868e5",
+      "sha256": "c35996eadb6f3a295756e8095ca971f380638dbdb137914a8aea46d584bcce02",
       "policy": "seeded"
     },
     "src/.gitkeep": {

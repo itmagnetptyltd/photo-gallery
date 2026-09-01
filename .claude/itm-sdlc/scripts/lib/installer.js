@@ -205,6 +205,7 @@ const SKILL_PROFILE = {
   metrics: "os",
   "client-report": "os",
   dashboard: "os",
+  "slice-add": "os",
   "regression-select": "os",
   librarian: "os",
 };
