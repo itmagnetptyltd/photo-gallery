@@ -288,7 +288,9 @@
   title: Activating a Photo in the grid opens that Photo in a larger view
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/lightbox.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "Clicking any photo should open
@@ -323,7 +325,9 @@
   title: The larger view can be dismissed and returns the person to the grid
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/lightbox.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "Clicking any photo should open
