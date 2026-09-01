@@ -55,12 +55,61 @@ quality. The client's answer 23 is the strongest evidence: it expressly ends
 consistent with what they agreed. Agreeing a route to request changes is not the
 same as agreeing a criterion requiring them.
 
-**Dependants.** REQ-PHOTO-011 is depended on by nothing. REQ-PHOTO-001 and
-REQ-PHOTO-002 are not changed by this record, but any redesign touches the same
-stylesheet their criteria are asserted against.
+**Dependants — derived from the requirement graph, `/impact-analysis` 2026-09-01.**
 
-**Tests invalidated — none, but three constrain the redesign.** These currently
-pass and encode agreed behaviour that a visual change must preserve, or bump:
+Nothing declares `depends_on: REQ-PHOTO-011`, so that requirement has no
+dependants of its own. But REQ-PHOTO-001 is in the affected set, and three
+requirements rest on it transitively:
+
+| Dependant | Rests on |
+|---|---|
+| REQ-PHOTO-008 | REQ-PHOTO-001 |
+| REQ-PHOTO-009 | REQ-PHOTO-001 |
+| REQ-PHOTO-010 | REQ-PHOTO-009 |
+
+REQ-PHOTO-002 also depends on REQ-PHOTO-001 and is already listed as affected.
+
+The graph is sound enough to rely on: 11 of 15 requirements declare a
+`depends_on`, and only 4 declare none — so this is a derived answer, not an
+inference from the code.
+
+**Tests invalidated — 0 today, 5 if REQ-PHOTO-011 is versioned.**
+
+No version has moved, so nothing is stale yet. If this change is accepted and
+REQ-PHOTO-011 goes to v2, five annotations pinned to `@v1` are superseded — they
+were written against text that would no longer say the same thing, and gate G3
+reports them as stale:
+
+```
+tests/responsive.test.js:50    @covers REQ-PHOTO-011@v1
+tests/responsive.test.js:70    @covers REQ-PHOTO-011@v1
+tests/responsive.test.js:83    @covers REQ-PHOTO-011@v1
+tests/responsive.test.js:100   @covers REQ-PHOTO-011@v1
+tests/responsive.test.js:131   @covers REQ-PHOTO-011@v1
+```
+
+All five are in one file. REQ-PHOTO-001 and REQ-PHOTO-002 are affected but not
+versioned by this record, so their annotations stay valid.
+
+**Regression scope — 6 of 11 test files**, being those covering the affected
+requirements and their dependants, not the whole suite:
+
+```
+tests/responsive.test.js    REQ-PHOTO-011
+tests/grid.test.js          REQ-PHOTO-001
+tests/store.test.js         REQ-PHOTO-001
+tests/tiles.test.js         REQ-PHOTO-002
+tests/live-insert.test.js   REQ-PHOTO-008
+tests/lightbox.test.js      REQ-PHOTO-009, REQ-PHOTO-010
+```
+
+**Estimate: cannot be given.** The new requirement text does not exist, and
+"attractive" has no agreed definition to size against. Anything offered now
+would be a number attached to an undefined scope. It becomes estimable once the
+client answers what attractive means in checkable terms.
+
+**Three passing tests constrain any redesign.** They encode agreed behaviour a
+visual change must preserve, or bump:
 
 | Test | Requirement | What it pins |
 |---|---|---|
