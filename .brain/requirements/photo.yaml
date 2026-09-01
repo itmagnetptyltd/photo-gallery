@@ -387,7 +387,9 @@
   title: The application runs on the Node.js runtime
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/boot.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "Create a simple and modern Photo
@@ -405,7 +407,9 @@
   title: The application starts and serves the home page on a single local development PC
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/boot.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "easy to run on a local
