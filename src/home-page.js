@@ -39,6 +39,16 @@ const grid = (photos, { total, offset, pageSize }) => {
       </ul>${more}`
 }
 
+const uploadModal = () => `
+    <dialog class="upload-modal">
+      <h2>Upload a photo</h2>
+      <input type="file" class="upload-file" accept="image/jpeg,image/png" />
+      <p class="chosen-file"></p>
+      <p class="upload-message" role="status"></p>
+      <button type="button" class="upload-submit">Upload</button>
+      <button type="button" class="upload-close">Cancel</button>
+    </dialog>`
+
 /** The complete home page document. */
 export const renderHomePage = ({ photos, total, offset, pageSize }) => `<!doctype html>
 <html lang="en">
@@ -51,7 +61,8 @@ export const renderHomePage = ({ photos, total, offset, pageSize }) => `<!doctyp
   <body>
     <h1>Photo Gallery</h1>
     <main>${photos.length === 0 ? emptyState() : grid(photos, { total, offset, pageSize })}
-    </main>
+    </main>${uploadModal()}
+    <script type="module" src="/upload-modal.js"></script>
   </body>
 </html>
 `
