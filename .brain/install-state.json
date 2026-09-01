@@ -2,10 +2,10 @@
   "stateVersion": 1,
   "toolkit": "itm-sdlc",
   "version": "1.0.0",
-  "commit": "341b24d7f004ae569a88ba7136daf9de0eb94cf9",
+  "commit": "14d89dad2cdd95210b20df9221b4574f7daef001",
   "ref": "kcb-dev-v1",
   "remote": "https://github.com/itmagnetptyltd/itm-sdlc.git",
-  "installedAt": "2026-09-01T02:26:32.424Z",
+  "installedAt": "2026-09-01T03:25:39.641Z",
   "modules": [
     "PHOTO"
   ],
@@ -159,42 +159,6 @@
       "sha256": "05b8670a2750f74a9415fccaca13aa6167893ad805445db94dc142b915ab405a",
       "policy": "managed"
     },
-    ".brain/changes/README.md": {
-      "sha256": "03250223375a266e2ee1348f633ec9b52087db387b31482eec21a108aa1818a1",
-      "policy": "seeded"
-    },
-    ".brain/constraints/README.md": {
-      "sha256": "9fa427e37f39461a38a9241dfe8552162a7d2b433c36197e241b25184f65b52a",
-      "policy": "seeded"
-    },
-    ".brain/decisions/README.md": {
-      "sha256": "32ffdbf01cd439f1ae0506116f0259db5b73f09a9b849563c9f2d81eb3e32f43",
-      "policy": "seeded"
-    },
-    ".brain/feedback/README.md": {
-      "sha256": "44868bcdbedcc6d798d04c42052c3799e259818802e64fe39cf3da1f6ea3c5fd",
-      "policy": "seeded"
-    },
-    ".brain/glossary.md": {
-      "sha256": "4433a293e297e2a26988f9081669bafb9bc51613eaa2b7ccca06e338c9dac3e0",
-      "policy": "seeded"
-    },
-    ".brain/index.md": {
-      "sha256": "fff9f94f196a2951487f452f6a59b537a7ac2f76e54964eabd8c1b3c2d8c74ea",
-      "policy": "seeded"
-    },
-    ".brain/rejected/README.md": {
-      "sha256": "526f06e123b621f4b805b114a92f053c11d1d2a680c181dff29a35e9e23f86e4",
-      "policy": "seeded"
-    },
-    ".brain/requirements/README.md": {
-      "sha256": "725066f1212b17a0538f24d67cdab67f6d3bdbc8d6cc8a7156661c35724b628c",
-      "policy": "seeded"
-    },
-    ".brain/sessions/README.md": {
-      "sha256": "2f4c7e20e2bfd9762d63e3db8158b120fabd740f436283709f45ed5ca179d216",
-      "policy": "seeded"
-    },
     ".claude/itm-sdlc/scripts/advance-status.js": {
       "sha256": "69ca998ac6751db7cb7eec850fc7c3dcb1ef035f5b3c638833cdfc7ec24dafe2",
       "policy": "managed"
@@ -228,7 +192,7 @@
       "policy": "managed"
     },
     ".claude/itm-sdlc/scripts/dashboard.js": {
-      "sha256": "23cff50c64e61a23a707ae9c6cc2052e603fc1d91957baeefafe07e04e33bb45",
+      "sha256": "eef27940cad5b895ad759d747a57adeae305c9081ba51fa9edbbec8db784b66d",
       "policy": "managed"
     },
     ".claude/itm-sdlc/scripts/gate-scope.js": {
@@ -269,6 +233,10 @@
     },
     ".claude/itm-sdlc/scripts/lib/requirements.js": {
       "sha256": "d30958235bcf5b9e6e3d468d729223845de2fd023755e3c9f317c1114e9d3448",
+      "policy": "managed"
+    },
+    ".claude/itm-sdlc/scripts/lib/slices.js": {
+      "sha256": "574bd3ea854ce750d3ef8a2f191c8bf650b2c0ac02b1a596c64a2cb9696f52d6",
       "policy": "managed"
     },
     ".claude/itm-sdlc/scripts/metrics.js": {
@@ -319,13 +287,57 @@
       "sha256": "c77326e37dedbdc0f8fb3a5f82e95da9275b5b138a1d8e17572717586eabc8a9",
       "policy": "managed"
     },
-    "CLAUDE.md": {
-      "sha256": "8dfa8be586ae343292df6a7259f66aad31767b796534ded916ff3c47420fd7ab",
-      "policy": "seeded"
-    },
     ".cursor/hooks.json": {
       "sha256": "3ee9513eaaaf3d5762e05348b27beefd4cf1b20c33df91ce43049b6d6f537e62",
       "policy": "managed"
+    },
+    ".claude/itm-sdlc/package.json": {
+      "sha256": "8b0ee66104b144783855cfa11701877fab2639be1bcd622ddbb71d10f2994719",
+      "policy": "managed"
+    },
+    ".claude/itm-sdlc/package-lock.json": {
+      "sha256": "ea26093bceb425faff9124ad6cdc2f8d7f03ed71dd221e4d9990b2c77f85200d",
+      "policy": "managed"
+    },
+    ".brain/changes/README.md": {
+      "sha256": "03250223375a266e2ee1348f633ec9b52087db387b31482eec21a108aa1818a1",
+      "policy": "seeded"
+    },
+    ".brain/constraints/README.md": {
+      "sha256": "9fa427e37f39461a38a9241dfe8552162a7d2b433c36197e241b25184f65b52a",
+      "policy": "seeded"
+    },
+    ".brain/decisions/README.md": {
+      "sha256": "32ffdbf01cd439f1ae0506116f0259db5b73f09a9b849563c9f2d81eb3e32f43",
+      "policy": "seeded"
+    },
+    ".brain/feedback/README.md": {
+      "sha256": "44868bcdbedcc6d798d04c42052c3799e259818802e64fe39cf3da1f6ea3c5fd",
+      "policy": "seeded"
+    },
+    ".brain/glossary.md": {
+      "sha256": "917d303f27226f6a85e755a47a440cfce500d9fdeb33f4e8366efcc9605891da",
+      "policy": "seeded"
+    },
+    ".brain/index.md": {
+      "sha256": "fff9f94f196a2951487f452f6a59b537a7ac2f76e54964eabd8c1b3c2d8c74ea",
+      "policy": "seeded"
+    },
+    ".brain/rejected/README.md": {
+      "sha256": "526f06e123b621f4b805b114a92f053c11d1d2a680c181dff29a35e9e23f86e4",
+      "policy": "seeded"
+    },
+    ".brain/requirements/README.md": {
+      "sha256": "725066f1212b17a0538f24d67cdab67f6d3bdbc8d6cc8a7156661c35724b628c",
+      "policy": "seeded"
+    },
+    ".brain/sessions/README.md": {
+      "sha256": "2f4c7e20e2bfd9762d63e3db8158b120fabd740f436283709f45ed5ca179d216",
+      "policy": "seeded"
+    },
+    "CLAUDE.md": {
+      "sha256": "8dfa8be586ae343292df6a7259f66aad31767b796534ded916ff3c47420fd7ab",
+      "policy": "seeded"
     },
     ".claude/prompt-changes.md": {
       "sha256": "3382fe5fd5f6117df2d134ddc966035949910c8a465ce584a439211a6e56256a",
@@ -338,14 +350,6 @@
     "src/.gitkeep": {
       "sha256": "f53d594e457e2a697df89ec3f4b2d63162fc35bde32d4d8d13601434e2565bc2",
       "policy": "seeded"
-    },
-    ".claude/itm-sdlc/package.json": {
-      "sha256": "8b0ee66104b144783855cfa11701877fab2639be1bcd622ddbb71d10f2994719",
-      "policy": "managed"
-    },
-    ".claude/itm-sdlc/package-lock.json": {
-      "sha256": "ea26093bceb425faff9124ad6cdc2f8d7f03ed71dd221e4d9990b2c77f85200d",
-      "policy": "managed"
     }
   }
 }
