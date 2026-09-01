@@ -208,14 +208,23 @@ function renderHtml(data) {
     })
     .join("");
 
+  const planned = slices.slices.length > 0;
   const sliceNote = !slices.present
     ? `<p class="empty-note">No <code>${escapeHtml(slices.file)}</code> in this project. Requirement order is the client's; slice order is a delivery decision, and until it is written down there is nothing here to show.</p>`
     : slices.problems.length
       ? `<ul class="problems">${slices.problems.map((m) => `<li>${escapeHtml(m)}</li>`).join("")}</ul>`
-      : "";
+      : !planned
+        ? `<p class="empty-note"><code>${escapeHtml(slices.file)}</code> is here but still the shipped template, so there is no plan to show against ${data.counts.requirements} requirement(s). Requirement ids carry the client's order; slice order is which increments can be demonstrated, and in what order. List your slices in that file and this table fills itself in.</p>`
+        : "";
 
-  const unplanned = slices.present && slices.unplanned.length
-    ? `<p class="empty-note">Not in any slice: ${slices.unplanned.map((id) => `<code>${escapeHtml(id)}</code>`).join(" ")}</p>`
+  // Unplanned ids are worth naming once a plan exists and a few were left out.
+  // Before that every requirement is unplanned, which is what the note above
+  // already says — in one line rather than in a wall of a hundred ids.
+  const UNPLANNED_SHOWN = 12;
+  const shown = slices.unplanned.slice(0, UNPLANNED_SHOWN);
+  const rest = slices.unplanned.length - shown.length;
+  const unplanned = planned && slices.unplanned.length
+    ? `<p class="empty-note">Not in any slice (${slices.unplanned.length}): ${shown.map((id) => `<code>${escapeHtml(id)}</code>`).join(" ")}${rest > 0 ? ` and ${rest} more` : ""}</p>`
     : "";
 
   const pager = (label) =>
@@ -325,28 +334,14 @@ function renderHtml(data) {
     color: var(--muted);
     text-align: center;
   }
-  .panel { margin-top: 1.25rem; }
-  .panel.grow { flex: 1; display: flex; flex-direction: column; min-height: 0; }
-  .panel.grow .paged { flex: 1; }
   .board {
     flex: 1;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 22rem);
-    gap: 1.15rem;
-    margin-top: 1.15rem;
-    min-height: 0;
-    align-items: start;
-  }
-  .board-main { display: flex; flex-direction: column; min-width: 0; }
-  .board-main .panel:first-child { margin-top: 0; }
-  .rail {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    gap: 0.85rem;
-    height: auto;
-    align-self: start;
+    min-height: 0;
+    margin-top: 1.15rem;
   }
+  .board-main { display: flex; flex-direction: column; min-width: 0; }
   .box {
     background: var(--card);
     border: 1px solid var(--line);
@@ -359,6 +354,7 @@ function renderHtml(data) {
     min-width: 0;
   }
   .box h2 { text-align: left; }
+  .box .records li:last-child { border-bottom: 0; }
   .box .count {
     color: var(--muted);
     font-weight: 600;
@@ -370,10 +366,46 @@ function renderHtml(data) {
     flex: 0 0 auto;
     height: auto;
   }
+  .tabs {
+    display: flex;
+    gap: 6px;
+    margin-top: 1.15rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .tab {
+    appearance: none;
+    background: none;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    border-radius: 8px 8px 0 0;
+    padding: 8px 14px;
+    margin-bottom: -1px;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .tab b { font-variant-numeric: tabular-nums; font-weight: 700; }
+  .tab:hover { color: var(--ink); }
+  .tab.on {
+    background: var(--card);
+    border-color: var(--line);
+    border-bottom: 1px solid var(--card);
+    color: var(--ink);
+  }
+  .tab-panel { display: flex; flex-direction: column; min-height: 0; }
+  .tab-panel[hidden] { display: none; }
+  .tab-panel.grow { flex: 1; }
+  .tab-panel.grow .paged { flex: 1; }
+  h2.spaced { margin-top: 1.25rem; }
+  .cols3 { display: grid; gap: 0.85rem; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
   .split { display: grid; gap: 18px; grid-template-columns: minmax(240px, 0.9fr) 1.1fr; }
   @media (max-width: 980px) {
     .stats { grid-template-columns: repeat(4, 1fr); }
-    .split, .board { grid-template-columns: 1fr; }
+    .split { grid-template-columns: 1fr; }
+    .cols3 { grid-template-columns: 1fr; }
+    .tabs { flex-wrap: wrap; }
   }
   @media (max-width: 640px) {
     .stats { grid-template-columns: repeat(2, 1fr); }
@@ -507,7 +539,6 @@ function renderHtml(data) {
     padding: 7px 0;
     border-bottom: 1px solid var(--line);
   }
-  .rail .records li:last-child { border-bottom: 0; }
   .records li.is-off { display: none !important; }
   .hist { grid-template-columns: 1fr; }
   .hist p { margin: 2px 0 0; color: #44403c; text-wrap: pretty; }
@@ -531,33 +562,26 @@ function renderHtml(data) {
     ${stat(data.counts.prompts, "Logged prompts")}
   </div>
 
+  <div class="tabs" role="tablist" aria-label="Dashboard sections">
+    <button type="button" role="tab" class="tab on" data-tab="reqs" aria-selected="true">Requirements <b>${data.counts.requirements}</b></button>
+    <button type="button" role="tab" class="tab" data-tab="slices" aria-selected="false">Task Sequence <b>${slices.slices.length}</b></button>
+    <button type="button" role="tab" class="tab" data-tab="records" aria-selected="false">Records <b>${data.counts.feedback + data.counts.decisions + data.counts.changes}</b></button>
+  </div>
+
   <div class="board">
     <div class="board-main">
-      <div class="split panel">
-        <section>
-          <h2>Status</h2>
-          ${bars}
-        </section>
-        <section>
-          <h2>Change history</h2>
-          <ul>${hist}</ul>
-        </section>
-      </div>
-
-      <section class="panel">
-        <h2>Delivery slices <span class="count">${slices.slices.length}</span></h2>
-        ${sliceNote}
-        <div class="table-wrap">
-          <table class="slices">
-            <thead><tr><th>#</th><th>Slice</th><th>Covers</th><th>Branch</th><th>Status</th></tr></thead>
-            <tbody>${sliceRows || '<tr><td colspan="5">No slices defined.</td></tr>'}</tbody>
-          </table>
+      <section class="tab-panel grow" data-panel="reqs" role="tabpanel">
+        <div class="split">
+          <section>
+            <h2>Status</h2>
+            ${bars}
+          </section>
+          <section>
+            <h2>Change history</h2>
+            <ul>${hist}</ul>
+          </section>
         </div>
-        ${unplanned}
-      </section>
-
-      <section class="panel grow">
-        <h2>Requirements</h2>
+        <h2 class="spaced">Requirements</h2>
         <div class="toolbar">
           <div class="filters" role="group" aria-label="Filter by status">${filters}</div>
           <label class="search">Search <input type="search" id="q" placeholder="REQ, title…"></label>
@@ -572,22 +596,36 @@ function renderHtml(data) {
           ${pager("Requirements")}
         </div>
       </section>
-    </div>
 
-    <aside class="rail" aria-label="Project records">
-      <section class="box">
-        <h2>Feedback <span class="count">${data.counts.feedback}</span></h2>
-        ${list(highestFirst(data.feedback), "None yet.", 5)}
+      <section class="tab-panel" data-panel="slices" role="tabpanel" hidden>
+        <h2>Task Sequence <span class="count">${slices.slices.length}</span></h2>
+        ${sliceNote}
+        <div class="table-wrap">
+          <table class="slices">
+            <thead><tr><th>#</th><th>Slice</th><th>Covers</th><th>Branch</th><th>Status</th></tr></thead>
+            <tbody>${sliceRows || '<tr><td colspan="5">No slices defined.</td></tr>'}</tbody>
+          </table>
+        </div>
+        ${unplanned}
       </section>
-      <section class="box">
-        <h2>Decisions <span class="count">${data.counts.decisions}</span></h2>
-        ${list(highestFirst(data.decisions), "None yet.", 5)}
+
+      <section class="tab-panel" data-panel="records" role="tabpanel" hidden>
+        <div class="cols3" aria-label="Project records">
+          <section class="box">
+            <h2>Feedback <span class="count">${data.counts.feedback}</span></h2>
+            ${list(highestFirst(data.feedback), "None yet.", 8)}
+          </section>
+          <section class="box">
+            <h2>Decisions <span class="count">${data.counts.decisions}</span></h2>
+            ${list(highestFirst(data.decisions), "None yet.", 8)}
+          </section>
+          <section class="box">
+            <h2>Change records <span class="count">${data.counts.changes}</span></h2>
+            ${list(highestFirst(data.changes), "None yet.", 8)}
+          </section>
+        </div>
       </section>
-      <section class="box">
-        <h2>Change records <span class="count">${data.counts.changes}</span></h2>
-        ${list(highestFirst(data.changes), "None yet.", 5)}
-      </section>
-    </aside>
+    </div>
   </div>
 </main>
 <script>
@@ -658,6 +696,33 @@ function renderHtml(data) {
 
   document.querySelectorAll(".paged:not([data-kind])").forEach((box) => {
     bindPager(box, Array.from(box.querySelectorAll("li")));
+  });
+
+  const tabs = Array.from(document.querySelectorAll(".tab"));
+  const panels = Array.from(document.querySelectorAll(".tab-panel"));
+  function show(name) {
+    tabs.forEach((t) => {
+      const on = t.getAttribute("data-tab") === name;
+      t.classList.toggle("on", on);
+      t.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    panels.forEach((p) => {
+      p.hidden = p.getAttribute("data-panel") !== name;
+    });
+  }
+  tabs.forEach((t) => {
+    t.addEventListener("click", () => show(t.getAttribute("data-tab")));
+  });
+  // Keyboard: a tablist is arrow-navigable, not tab-through-every-button.
+  document.querySelector(".tabs")?.addEventListener("keydown", (event) => {
+    const i = tabs.indexOf(document.activeElement);
+    if (i < 0) return;
+    const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+    if (!step) return;
+    event.preventDefault();
+    const next = tabs[(i + step + tabs.length) % tabs.length];
+    next.focus();
+    show(next.getAttribute("data-tab"));
   });
 })();
 </script>
