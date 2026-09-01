@@ -130,438 +130,178 @@ Easy to run means Node.js must be installed first, then the project can be start
 
 # Answers — second brief, Sep-01-2026
 
-Questions 29-50 arise from KCB's feedback on the first delivery. Paste their
-reply under the question it answers, in their words. Then run
-`/resolve-ambiguities`.
+
+# Answers — second brief, Sep-01-2026
+
+Questions 29-50 arise from KCB's feedback on the first delivery, captured as
+`FB-0001` and scoped by `CHG-0001`. All 22 were answered on Sep-01-2026.
+
+Run `/resolve-ambiguities` to write these into the acceptance criteria of
+REQ-PHOTO-016 to REQ-PHOTO-024, clear questions 29-50 from `AMBIGUITIES.md` and
+the `ambiguities` lists in `photo.yaml`, and move those requirements from `draft`
+to `agreed`.
 
 The 28 answers above are the record of the first brief and stay where they are.
 
-> **STATUS — these 22 questions are still OPEN.**
->
-> What follows each question below is a **delivery-team proposal**, not the
-> client's answer. It is recorded here so KCB has something concrete to say yes,
-> no or "not that" to, and so the shape of the work can be discussed before it is
-> priced. Nothing below closes a question, nothing below may be written into an
-> acceptance criterion, and `/resolve-ambiguities` must not treat any of it as an
-> answer. Questions 29-50 remain in `AMBIGUITIES.md` and the requirements they
-> block remain `draft`.
->
-> When KCB replies, **replace** the proposal under each question with their
-> words. Where they simply agree, record that as their answer in their own
-> confirmation ("we agree with your proposal of ..."), not as our text promoted
-> in place.
->
-> The proposals share three deliberate stances, agreed with IT Magnet on
-> Sep-01-2026 before drafting:
->
-> 1. **We propose the design values; KCB approves them once.** Every number the
->    brief left out is collected into a single one-page **token sheet** —
->    palette, typeface stack, text sizes, spacing steps, corner radius, focus
->    ring, button variants. That sheet is approved before any styling is built,
->    and it is what "professional" is then measured against.
-> 2. **Styling only.** No proposal here changes agreed behaviour, so no
->    `verified` requirement needs versioning and no `/change-record` is implied.
->    Where a question could only be answered by touching one, the proposal takes
->    the reading that does not.
-> 3. **Where a proposal costs KCB something, it says so.** Question 47 in
->    particular has a consequence for the record that they should see before
->    agreeing.
-
 ## 29. Who judges "professional", and against what?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Neither (a) nor (b) as written. We are not aware of a reference site or
-screenshot you have in mind, and reading (b) is what produced FB-0001, so we
-propose a third route: we produce the **token sheet** described above — one page
-showing the palette, type sizes, spacing steps, corner radius and button
-treatments, with a rendering of a tile, a button, the app bar and the empty
-state. You approve that sheet. "Professional" then means "built to the approved
-sheet", which is checkable by anyone.
-
-Acceptance is a single event: one demo against the approved sheet. Anything you
-want changed after the sheet is approved is a variation, not a defect.
-
-If you do have a site or product you consider professional, tell us and we will
-build the sheet from it instead — that is faster and cheaper than us guessing.
+There is no reference site or screenshot to be judged against. "Professional"
+means built to an agreed design token sheet: one page setting out the palette,
+typeface, text sizes, spacing steps, corner radius, focus ring and button
+variants, approved before any styling is built. Acceptance is a single demo
+against that approved sheet. Anything requested after the sheet is approved is a
+variation, not a defect.
 
 ## 30. Who supplies the design values — you or us?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (b), with a formal approval step so it cannot run open-ended: we propose
-the complete set of values, you approve them in one round, and we then build
-exactly what was approved.
-
-Concretely, we would deliver the token sheet listing:
-
-- a palette (see 31),
-- a typeface stack (see 32),
-- a text-size scale (see 48),
-- a spacing scale (see 48),
-- one corner-radius value (see 39),
-- a focus-ring treatment (see 43),
-- two button variants and which control uses which (see 50).
-
-Until you approve that sheet, REQ-PHOTO-016 through REQ-PHOTO-024 stay `draft`
-and cannot be estimated. The sheet is the smallest thing that unblocks all nine.
+The delivery team proposes the values and the client approves them in one round
+before the work starts. The token sheet covers the palette, typeface stack,
+text-size scale, spacing scale, corner radius, focus ring and button variants.
+REQ-PHOTO-016 to REQ-PHOTO-024 are estimable once the sheet is approved.
 
 ## 31. Is there a palette, and is it light or dark?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (b), light only. We are not aware of brand colours we must use; if there
-are any, send them and they replace this.
-
-We propose a neutral light palette: near-white page, white surfaces for the app
-bar, tiles and modals, a dark neutral for text, a mid neutral for borders and
-quiet controls, and **one** accent colour used only for the primary action.
-
-A dark appearance is **out of scope for this change**. It roughly doubles the
-styling surface and makes every later colour decision twice, as question 31
-notes. If you want it, we would rather do it as its own piece of work on top of
-an approved light palette than build both at once.
+There are no brand colours that must be used. Use a neutral light palette: a
+near-white page, white surfaces for the app bar, tiles and modals, a dark neutral
+for text, a mid neutral for borders and quiet controls, and a single accent
+colour used only for the primary action. A dark appearance is out of scope for
+this change.
 
 ## 32. Which typeface, and may it be fetched over the network?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (c): the typefaces already present on the person's computer, specified as
-a system font stack. No font file is shipped and nothing is downloaded when the
-page opens.
-
-We propose this because reading (b) would make a locally-run application depend
-on an internet connection and an outside service, which sits directly against
-REQ-PHOTO-014@v1 ("no ... cloud service required") and adds a dependency of a
-purpose REQ-PHOTO-015@v1 does not list. Both are `verified`. Choosing (b) is
-therefore not a styling decision but a `/change-record` against two agreed
-requirements, and we would want that decided on its merits rather than as a side
-effect of picking a typeface.
-
-If a particular typeface matters to you, reading (a) — shipping the font file
-with the application — is the version that does not break anything. Tell us the
-typeface and we will price it.
+Use the typefaces already present on the person's computer, specified as a system
+font stack. No font file is shipped with the application and no font is
+downloaded when the page opens, so REQ-PHOTO-014@v1 and REQ-PHOTO-015@v1 are
+unaffected.
 
 ## 33. What is "the product name"?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a): the app bar reads **Photo Gallery**, the words already on the page.
-
-This needs one consequential amendment you should be aware of.
-`.brain/glossary.md` currently records that the Gallery "is never referred to by
-name or id". Putting a name in the interface contradicts that. We propose
-amending the glossary entry to say the Gallery has no identifier but does have a
-**display name**, "Photo Gallery", shown in the app bar — which removes the
-contradiction without changing any behaviour.
-
-If the product has a real name you have not told us yet, give it to us now
-rather than later: it is the single most visible piece of text in the
-application and it appears on every view.
+The app bar reads **Photo Gallery** — the words already on the page. The Gallery
+entry in `.brain/glossary.md` is amended to record that the Gallery has no
+identifier but does have a display name, "Photo Gallery", shown in the app bar.
 
 ## 34. Where does the app bar sit, and what does it do when the page scrolls?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a): the bar sits at the top of the page and scrolls away with the
-content.
-
-Reading (b) permanently removes a strip of the viewport from the Grid and has to
-be accounted for by every view, which means re-checking the layout against
-REQ-PHOTO-011@v1 — `verified`. It is also the harder of the two to reverse. (a)
-gets you the app bar you asked for without touching agreed behaviour.
-
-If you want the bar to stay on screen while scrolling, say so now rather than
-after the styling is built; it is cheap to decide and expensive to flip.
+The app bar sits at the top of the page and scrolls away with the content. It is
+not fixed, so no strip of the viewport is permanently removed from the Grid and
+REQ-PHOTO-011@v1 is unaffected.
 
 ## 35. Does the "+ Upload Photo" control move into the app bar?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a): the app bar carries the product name only, and "+ Upload Photo"
-stays where it is today, above the Grid.
-
-REQ-PHOTO-003@v1 and REQ-PHOTO-011@v1 criterion 2 are both `verified` and
-describe where that control sits. Moving it is a version bump and a
-`/change-record`, not a styling change — so we are not proposing it as part of a
-restyle. If you want it in the bar, that is a perfectly reasonable ask; it is
-just a scope item with its own paperwork and price, and we would rather raise it
-than slip it in.
+The app bar carries the product name only. The "+ Upload Photo" control stays
+where it is today, above the Grid, as REQ-PHOTO-003@v1 and REQ-PHOTO-011@v1
+criterion 2 describe.
 
 ## 36. Is the app bar in front of the Larger view, or behind it?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a): opening a Photo covers the app bar, and the Photo has the whole
-viewport.
-
-REQ-PHOTO-009@v1 requires the Original to be "sized to fit within the available
-viewport". Reading (b) takes space away from it and puts the app bar and the
-close control in the same corner of the screen, which is both a smaller picture
-and a worse target. (a) is the reading that leaves REQ-PHOTO-009 alone.
+When a Photo is open in the Larger view the overlay covers the app bar, and the
+Photo has the whole viewport. This keeps the space REQ-PHOTO-009@v1 requires for
+the Original and keeps the app bar clear of the close control.
 
 ## 37. What changes on hover, and what do touch and keyboard users get instead?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a): appearance only. Nothing is revealed on hover that is not otherwise
-shown.
-
-For a button, that is a small shift in background and border. For a tile, a
-slight lift and a border tint. Nothing appears, nothing moves out from under the
-pointer, and nothing becomes reachable only by hovering.
-
-We propose this specifically so that there is nothing to replace for people using
-a touch screen or a keyboard alone — under (a) they lose nothing, so no second
-design is needed. Keyboard users additionally get the focus ring (question 43),
-which we would give the same visual weight as the hover treatment.
-
-Reading (b) would mean designing a second route to whatever hover reveals, and we
-would want to price that separately.
+Hover changes appearance only. Buttons shift background and border; tiles lift
+slightly and gain a border tint. Nothing is revealed on hover that is not
+otherwise shown, so people using a touch screen or the keyboard alone lose
+nothing and no second design is needed. Keyboard focus is given the same visual
+weight as hover.
 
 ## 38. May a tile's hover state show text?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a): no. The tile shows the image alone, hovered or not.
-
-REQ-PHOTO-002@v1 criterion 5 is `verified` and requires "the image alone, with no
-filename, size, date or other metadata text", and `tests/tiles.test.js` asserts
-that a tile carries no text at all. Reading (b) contradicts an agreed and tested
-requirement and would need REQ-PHOTO-002 versioned.
-
-Note also that this is consistent with answer 13 of the first brief, in which you
-told us no additional Photo information is required in the grid or larger view.
-If you have changed your mind about that, it is a change of scope rather than a
-styling detail, and we should handle it as one.
+No. A tile shows the image alone whether hovered or not — no filename, date or
+caption appears over it. This holds REQ-PHOTO-002@v1 criterion 5 and is
+consistent with answer 13 above.
 
 ## 39. Which elements have rounded corners besides the tiles?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (b), bounded to a single value: **one** corner-radius token, listed on
-the token sheet, applied to the tiles, the buttons, the upload modal surface and
-the Larger view's control surfaces.
-
-The app bar is the exception — it spans the full width of the window, so it has
-no visible corners to round.
-
-We propose (b) because deciding it afterwards means revisiting every styled
-element, and because a single shared value is what makes a set of controls look
-like one product rather than several. Keeping it to one value means you can
-change your mind about the amount of rounding later by changing one number.
+A single corner-radius value, named on the token sheet, applies to the tiles, the
+buttons, the upload modal surface and the Larger view's control surfaces. The app
+bar spans the full width of the window and has no visible corners to round.
+Because the radius is one shared value, the amount of rounding can be changed
+later in one place.
 
 ## 40. Is "lightbox" the Larger view, and what is its "chrome"?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a). We take "lightbox" to be your word for what the record calls the
-**Larger view**, and "chrome" to be its close, previous and next controls. We
-propose recording "lightbox" in `.brain/glossary.md` as your synonym for Larger
-view so the two vocabularies stop drifting.
-
-The darkened backdrop behind the Photo stays as delivered and is **not** restyled
-under this change. It is the largest coloured area in the application, and
-changing it changes how every Photo reads; if you want it altered, we would
-rather you asked for that deliberately than have us adjust it while styling
-buttons.
-
-REQ-PHOTO-024 has been drafted on this reading and its `source` says so. If you
-mean reading (b), that requirement needs rewriting, not just extending.
+"Lightbox" means the Larger view and is recorded in `.brain/glossary.md` as a
+client synonym for it. "Chrome" means its close, previous and next controls. The
+darkened backdrop behind the Photo stays as delivered and is not restyled under
+this change.
 
 ## 41. Must the Larger view's controls stay legible over any Photo?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (b), with a named standard so it is testable rather than arguable: the
-close, previous and next controls each sit on their **own surface** — a solid or
-near-solid shape behind the icon — and the icon meets a contrast ratio of at
-least **4.5:1 against that surface**. Because the surface is opaque, the standard
-holds whatever Photo is behind it, including a white one.
-
-We propose naming a ratio because "clearly visible" is otherwise a word like
-"professional": no test can check it, and it can be reopened at every review.
-
-To be clear about what this is not: answer 22 of the first brief records that a
-formal WCAG conformance level is not required, and this proposal does not change
-that. It borrows one number as a measuring stick for three controls; it is not a
-conformance claim about the application.
+Yes. The close, previous and next controls each sit on their own opaque surface,
+and each icon has a contrast ratio of at least 4.5:1 against that surface, so they
+remain legible whatever Photo is open, including a very light one. This is a
+measurement applied to those three controls and is not a WCAG conformance claim;
+answer 22 above still stands.
 
 ## 42. Is the upload modal part of this restyle?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (b): the upload modal is in scope and is restyled with everything else —
-the same type scale, spacing scale, button variants, surface treatment and corner
-radius.
-
-It is one of only four views in the application. A modal left as it was, opened
-from a restyled home page at the demo under question 29, will read as unfinished
-and will cost us both a review cycle. The incremental work is small because it
-reuses values that the rest of the change already defines.
+Yes. The upload modal is restyled with everything else, using the same type
+scale, spacing scale, button variants, surface treatment and corner radius, so
+that no view is left looking unfinished at the demo.
 
 ## 43. The focus ring already ships — what more do you want?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a), with one addition: the ask is already met. A `:focus-visible`
-outline ships today, `tests/responsive.test.js` asserts under REQ-PHOTO-011@v1
-that the rule exists and does not remove the outline, and REQ-PHOTO-011@v1
-criterion 4 — `verified` — requires every control to be reachable and activatable
-from the keyboard.
-
-What we propose to do is restyle that existing ring to the token sheet's colour
-and width so it looks like part of the new design rather than a browser default.
-That is a change of appearance to an existing rule; it does not remove the
-outline, so the existing assertion continues to hold and no requirement is
-versioned.
-
-We are **not** proposing reading (c). Turning the ring into an agreed criterion of
-its own is a version bump of REQ-PHOTO-011, which as CHG-0001 sets out supersedes
-five `@v1` test annotations in `tests/responsive.test.js`. That is real work with
-no visible result, and we would only do it if you specifically want the ring
-protected by the record rather than merely present. Say so and we will price it.
-
-If reading (b) is the case — there is an element whose ring you cannot see —
-tell us which one and we will treat it as a defect.
+The ask is already met by the `:focus-visible` outline that ships today. It is
+restyled to the token sheet's colour and width so that it matches the new design;
+the rule remains and the outline is not removed, so the existing assertion in
+`tests/responsive.test.js` continues to hold. No new requirement is written and
+REQ-PHOTO-011 is not versioned.
 
 ## 44. The empty state already exists — what does "designed" add?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a): the empty state is restyled with the rest of the application —
-the new type scale, spacing scale and button treatment — and nothing about it
-changes structurally. The same words, the same "+ Upload Photo" control.
-
-Under this reading it is fully covered by REQ-PHOTO-001@v1 plus REQ-PHOTO-017,
-REQ-PHOTO-018 and REQ-PHOTO-020, and no new requirement is needed.
-
-Reading (b) needs something from you before it can be built: the wording you want,
-and, if you want an illustration, either the image or a decision that we source
-one. It would also be the first non-Photo image in the application, and it may
-mean versioning REQ-PHOTO-001@v1 — which is `verified` and which three other
-requirements depend on. If you want more than a restyle here, tell us what it
-should say or show.
+The empty state is restyled with the rest of the application — the same wording,
+the same "+ Upload Photo" control, the new type, spacing and button treatment.
+Nothing is added to it structurally: no illustration, no heading and no new
+words. It stays covered by REQ-PHOTO-001@v1 together with REQ-PHOTO-017,
+REQ-PHOTO-018 and REQ-PHOTO-020, and REQ-PHOTO-001 is not versioned.
 
 ## 45. Does "professional" extend to small screens?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a): desktop widths only, as scoped by the first brief.
-
-Answer 21 of Sep-01-2026 records your decision that the application supports
-desktop development PCs on current Chrome, Edge and Firefox, and that "mobile
-phones and tablets are out of scope". REQ-PHOTO-011's criteria all say "a common
-desktop viewport width". We propose the second brief inherits that scope rather
-than silently widening it.
-
-Reading (b) means a second layout for the app bar, the type scale, the spacing
-scale and the Larger view, and it would make the hover work of question 37 mostly
-irrelevant on the device being judged. If you intend to show this on a phone, say
-so now — it is a different piece of work with a different price, not a detail of
-this one.
+Desktop widths only, as answer 21 above scoped the first brief. Mobile phones and
+tablets remain out of scope, and REQ-PHOTO-011's "common desktop viewport width"
+continues to apply.
 
 ## 46. Does this include how tiles crop photos, and blurry small photos?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a): presentation only. Corners and hover change; how much of a Photo a
-square tile crops does not, and neither does the handling of Photos smaller than
-their tile.
-
-We are **not** proposing that the cropping question is settled — only that it is
-not settled here. FB-0001 records the crop observation as **escalate**, expressly
-unsettled, because the record cannot tell a defect from a variation, and that
-classification decides who pays. It is a commercial call and it needs a person to
-make it, not a styling decision to absorb it.
-
-Reading (b) changes the Grid's geometry and probably how Renditions are
-generated, reaching REQ-PHOTO-002@v1 and REQ-PHOTO-006@v1 — both `verified`. It
-is a substantially larger piece of work than styling and deserves its own
-estimate. If the crops are a large part of what looks amateur to you, tell us and
-we will take it up as its own item rather than fold it into this.
+This change is presentation only: rounded corners and a hover state. How much of
+a Photo a square tile crops, and how a Photo smaller than its tile is handled, do
+not change, so REQ-PHOTO-002@v1 and REQ-PHOTO-006@v1 are untouched. The crop
+observation recorded in FB-0001 remains **escalate** and is decided separately
+from this brief.
 
 ## 47. How is any of this to be checked, given nothing has ever been rendered?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a): sign-off by eye, by you, at an agreed demo, against the token sheet
-approved under question 30. No browser automation is added.
-
-**You should know what this costs you before agreeing.** On the evidence rule in
-`requirements/README.md`, a requirement checked only by a person looking at a
-screen cannot reach `verified`. REQ-PHOTO-016 through REQ-PHOTO-024 would rest at
-`agreed` plus a recorded demo acceptance, which is a weaker position in the record
-than every requirement from the first brief currently holds. We are telling you
-this rather than letting you discover it at the demo.
-
-Two things soften it without adding a dependency. First, the values themselves —
-the type sizes, spacing steps, radius, palette and focus ring — will live as named
-tokens in the stylesheet, and those **can** be asserted by the existing test
-setup without rendering anything, because it is text in a file. So "the approved
-scale is the one in use" is testable even though "it looks professional" is not.
-Second, the demo can be recorded so what was accepted is not a matter of memory.
-
-Reading (b) — driving a real browser — requires a dependency of a purpose
-REQ-PHOTO-015@v1 excludes, so it cannot be done without versioning that
-`verified` requirement through `/change-record`. We would do it if you want it,
-and it is the only route by which these requirements reach `verified`; it is not
-a small addition.
+The look is signed off by eye, by the client, at an agreed demo against the
+approved token sheet. No browser automation is added and no new dependency is
+introduced, so REQ-PHOTO-015@v1 stands. The token values themselves — text
+sizes, spacing steps, radius, palette and focus ring — are named in the
+stylesheet and asserted by the existing test setup without rendering anything.
+It is accepted that on the evidence rule in `requirements/README.md`,
+REQ-PHOTO-016 to REQ-PHOTO-024 rest at `agreed` with a recorded demo acceptance
+and do not reach `verified`.
 
 ## 48. Does "scale" mean a written-down set of steps, or just consistency?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a): a finite, documented set of steps that every element is drawn from.
-
-Specifically, we propose a **text-size scale** of five or six named steps (app bar
-title, section heading, body, small, caption) and a **spacing scale** of a single
-base unit with a fixed set of multiples. Both are listed on the token sheet you
-approve, and both are expressed as named tokens in the stylesheet, so anyone can
-read the list and check what is in use against it.
-
-We propose (a) because it is the only reading that yields anything observable.
-REQ-PHOTO-017 and REQ-PHOTO-018 are drafted on it for exactly that reason: under
-reading (b) they have no acceptance criteria at all, and if (b) is what you mean,
-those two requirements should say plainly that they cannot be accepted except by
-opinion.
+A written-down set of steps that every element is drawn from. The text-size scale
+has named steps — app bar title, section heading, body, small, caption — and the
+spacing scale is a single base unit with a fixed set of multiples. Both are listed
+on the approved token sheet and expressed as named tokens in the stylesheet, so
+the list can be read and checked against what is in use.
 
 ## 49. May the spacing scale change the gap between tiles?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (a): the Grid's existing gap is adopted as one of the scale's steps and
-keeps its current value. The scale is built around it rather than over it.
-
-REQ-PHOTO-011@v1 criterion 3 is `verified` and requires uniform spacing between
-tiles, and `tests/responsive.test.js` pins a single `gap`. Reading (b) preserves
-uniformity but changes a visible property of delivered, agreed behaviour and
-would need the test re-baselined. That should be your decision, not a side effect
-of ours — which is why we are proposing the conservative reading.
-
-If the gap looks wrong to you, say so and we will change it: it is a small change
-and a cheap one. We simply will not change it without being asked.
+No. The Grid's existing gap keeps its current value and is adopted as one of the
+scale's steps. Spacing between tiles stays uniform and unchanged, so
+REQ-PHOTO-011@v1 criterion 3 and the pinned `gap` in `tests/responsive.test.js`
+are unaffected.
 
 ## 50. One button treatment, or several?
 
-**PROPOSED — awaiting KCB confirmation.**
-
-Reading (b): two variants, no more.
-
-- **Primary** — prominent, using the single accent colour from question 31.
-  Proposed for: "+ Upload Photo", and the confirming action inside the upload
-  modal.
-- **Secondary** — quiet, neutral surface with a border. Proposed for: Cancel,
-  the Larger view's Close, and its Previous and Next.
-
-Two is enough to make the important action obvious and few enough that we are not
-inventing a system you did not ask for. Retrofitting variants after building one
-flat treatment means restyling every button twice, which is why we are asking
-now.
-
-The assignment above is a decision about what you want people to do, so please
-confirm it or move a control between the two. In particular, tell us if the
-delete confirmation — which REQ-PHOTO-005 covers — should have a treatment of its
-own; we have not proposed one, and if you want destructive actions to look
-different, that is a third variant and we should agree it here rather than
-discover it later.
+Two variants, and no more. **Primary**, using the accent colour from answer 31,
+for "+ Upload Photo" and the confirming action inside the upload modal.
+**Secondary**, a quiet neutral surface with a border, for Cancel, the Larger
+view's Close, and its Previous and Next. The delete confirmation covered by
+REQ-PHOTO-005 uses the secondary treatment; there is no separate destructive
+variant.

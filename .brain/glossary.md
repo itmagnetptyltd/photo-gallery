@@ -56,6 +56,8 @@ spelled this way, in requirements, code, tests and conversation.
 Photos it holds.
 - **Identified by:** nothing. There is exactly one, so it is never referred to by
   name or id.
+- **Display name:** "Photo Gallery", shown in the App bar. Settled by answer 33
+  of Sep-01-2026. The Gallery has no identifier but does have a name people read.
 - **Note:** there are no named collections and no second Gallery. "Gallery" and
   "the application" are the same thing.
 
@@ -82,6 +84,10 @@ Photos it holds.
 sized to the viewport.
 - **Not to be confused with:** a separate page. It is an overlay; the address
   does not change.
+- **Client synonym:** *lightbox*. Settled by answer 40 of Sep-01-2026. The client
+  says lightbox; requirements, code and tests say Larger view.
+- **Chrome:** its close, previous and next controls — and only those. The
+  darkened backdrop behind the Photo is not part of the chrome.
 
 ---
 
@@ -100,29 +106,69 @@ Any of these arriving later is a variation, not a gap: `/find-variation`.
 
 ---
 
+## Design terms
+
+Introduced by the **second brief of Sep-01-2026** and settled by KCB's answers of
+the same date (`requirements/ANSWERS.md`, questions 29–50). None of these was
+defined by the delivery team.
+
+**Token sheet** — the one page setting out every design value the Gallery is
+built from: the palette, typeface stack, text-size scale, spacing scale, corner
+radius, focus ring and button variants.
+- **Note:** the delivery team proposes it, the client approves it in one round,
+  and only then is styling built. No styling under REQ-PHOTO-017 to
+  REQ-PHOTO-024 is accepted ahead of that approval.
+- **Note:** it is also the standard "professional" is judged against. Anything
+  asked for after the sheet is approved is a variation, not a defect.
+
+**Type scale** — the finite, named set of text sizes every piece of text is drawn
+from: app bar title, section heading, body, small, caption.
+- **Not to be confused with:** mere consistency. The steps are written down on the
+  token sheet and named in the stylesheet, so the list can be read and checked.
+
+**Spacing scale** — a single base unit and a fixed set of multiples of it, from
+which every space between and around elements is taken.
+- **Note:** the Grid's existing gap keeps its value and is adopted as one of the
+  steps. The scale is built around it, not over it.
+
+**App bar** — the region at the top of the home page carrying the Gallery's
+display name, "Photo Gallery", and nothing else.
+- **Note:** it scrolls away with the content. It is not fixed, and the Larger
+  view's overlay covers it.
+- **Not to be confused with:** a toolbar. The "+ Upload Photo" control does not
+  live here; it stays above the Grid.
+
+**Button variant** — one of exactly two defined button treatments.
+- **Primary** — the accent colour, used for "+ Upload Photo" and the confirming
+  action in the upload modal. The accent appears nowhere else.
+- **Secondary** — a quiet neutral surface with a border, used for Cancel, the
+  delete confirmation, and the Larger view's close, previous and next.
+- **Note:** there is no third variant. Destructive actions do not look different.
+
+**Hover state** — a change of appearance alone when a pointer rests on a control
+or tile. Buttons shift background and border; tiles lift slightly and gain a
+border tint.
+- **Note:** nothing is *revealed* on hover that is not otherwise shown, so people
+  using touch or the keyboard alone lose nothing and no second design is needed.
+- **Note:** keyboard focus carries the same visual weight as hover.
+
+**Corner radius** — one shared value, rounding the tiles, the buttons, the upload
+modal surface and the Larger view's control surfaces.
+- **Note:** because it is one value, the amount of rounding changes in one place.
+  The app bar spans the window and has no visible corners to round.
+
+**Focus ring** — the `:focus-visible` outline that already ships under
+REQ-PHOTO-011@v1, drawn in the token sheet's colour and width.
+- **Note:** this was an ask in the second brief that was **already met**. It is
+  restyled, never removed, and REQ-PHOTO-011 is not versioned for it.
+
+---
+
 ## Appears in source documents, not yet defined
 
-The first brief's terms were all settled on Sep-01-2026. The **second brief of
-Sep-01-2026** then introduced these, and none is defined by anything in the
-record. Each has a matching question in `requirements/AMBIGUITIES.md`.
+_(none — the first brief's terms were settled on Sep-01-2026, and the second
+brief's were settled the same day by answers 29–50.)_
 
-- **professional** / **amateur** — the judgement the whole brief rests on, with
-  no stated standard and no reference the client pointed at
-- **type scale** — no typeface, no sizes, no ratio given
-- **spacing scale** — the Grid already uses one `gap`; whether this means a
-  documented scale or different values is unstated
-- **app bar** — no content beyond "the product name", no position, no behaviour
-  on scroll
-- **the product name** — the page says "Photo Gallery"; whether that is the name
-  has never been confirmed
-- **styled** (buttons, lightbox chrome) — no palette, no shape, no weight
-- **hover state** — what changes on hover is not said, and hover does not exist
-  on touch input
-- **rounded corners** — no radius
-- **designed empty state** — the empty state already exists and carries an
-  invitation and the upload control; what "designed" adds is unstated
-- **lightbox chrome** — presumably the close, previous and next controls, but
-  "chrome" was never defined
-- **focus ring** — a `:focus-visible` outline already ships under
-  REQ-PHOTO-011@v1; whether this ask is already satisfied is a question for the
-  client, not for us to close
+A term arriving here again means a brief has used a word the record cannot
+define. It is a question for the client, never a gap for the delivery team to
+fill: that is what produced FB-0001.
