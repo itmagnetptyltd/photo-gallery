@@ -3,6 +3,18 @@
  * genuine image bytes rather than bytes the implementation produced itself.
  */
 import { deflateSync } from 'node:zlib'
+import { Jimp } from 'jimp'
+
+/**
+ * A JPEG, for REQ-PHOTO-002 criterion 3.
+ *
+ * Generated with `jimp` — the same library the thumbnail generator uses, so a
+ * defect inside jimp could in principle mask itself here. Hand-writing a JPEG
+ * encoder for a fixture is not proportionate; the weakness is named rather
+ * than hidden.
+ */
+export const makeJpeg = async (edge = 128) =>
+  new Jimp({ width: edge, height: edge, color: 0x3366ccff }).getBuffer('image/jpeg')
 
 const crc32 = (buffer) => {
   let crc = ~0

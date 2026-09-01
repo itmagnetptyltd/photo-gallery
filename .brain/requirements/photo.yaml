@@ -60,7 +60,9 @@
   title: Each Photo in the grid is shown at thumbnail size, not at Original size
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/tiles.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "with each photo shown as a
@@ -259,7 +261,9 @@
   title: A newly uploaded Photo appears in the grid without the page being reloaded
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/live-insert.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "After uploading, the new photo

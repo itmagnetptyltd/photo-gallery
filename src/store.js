@@ -46,7 +46,7 @@ const toPhoto = (row) => ({
   filename: row.filename,
   type: row.type,
   uploadedAt: row.uploaded_at,
-  imageUrl: `/photos/${row.id}/image`,
+  thumbnailUrl: `/photos/${row.id}/thumbnail`,
 })
 
 export const openStore = ({ directory }) => {

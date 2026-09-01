@@ -15,6 +15,28 @@ const close = modal.querySelector('.upload-close')
 /** True while a request is in flight; the modal may not be dismissed then. */
 let uploading = false
 
+/**
+ * The Grid, creating it if this is the first Photo. With none stored the page
+ * shows the empty state and has no grid to insert into (REQ-PHOTO-008 with a
+ * grid of zero).
+ */
+const galleryGrid = () => {
+  const existing = document.querySelector('.gallery-grid')
+  if (existing) return existing
+
+  document.querySelector('.empty-state')?.remove()
+
+  const grid = document.createElement('ul')
+  grid.className = 'gallery-grid'
+  document.querySelector('main').append(grid)
+  return grid
+}
+
+/** Puts a newly uploaded Photo at the front of the Grid, newest Upload first. */
+const insertTile = (fragment) => {
+  galleryGrid().insertAdjacentHTML('afterbegin', fragment)
+}
+
 const reset = () => {
   fileInput.value = ''
   chosenFile.textContent = ''
@@ -69,9 +91,13 @@ submit.addEventListener('click', async () => {
       headers: { 'content-type': file.type, 'x-filename': file.name },
       body: file,
     })
-    message.textContent = response.ok
-      ? 'Accepted.'
-      : 'That image could not be uploaded.'
+
+    if (response.ok) {
+      insertTile(await response.text())
+      message.textContent = 'Added.'
+    } else {
+      message.textContent = 'That image could not be uploaded.'
+    }
   } catch {
     message.textContent = 'That image could not be uploaded.'
   } finally {

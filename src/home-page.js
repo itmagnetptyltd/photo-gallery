@@ -17,9 +17,9 @@ const escapeHtml = (value) =>
 const uploadControl = () =>
   '<button type="button" class="upload-control">+ Upload Photo</button>'
 
-const tile = (photo) => `
+export const renderTile = (photo) => `
         <li class="tile" data-photo-id="${escapeHtml(photo.id)}">
-          <img src="${escapeHtml(photo.imageUrl)}" alt="" />
+          <img src="${escapeHtml(photo.thumbnailUrl)}" alt="" />
         </li>`
 
 const emptyState = () => `
@@ -35,7 +35,7 @@ const grid = (photos, { total, offset, pageSize }) => {
 
   return `
       ${uploadControl()}
-      <ul class="gallery-grid">${photos.map(tile).join('')}
+      <ul class="gallery-grid">${photos.map(renderTile).join('')}
       </ul>${more}`
 }
 
