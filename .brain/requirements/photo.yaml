@@ -1,0 +1,450 @@
+# .brain/requirements/photo.yaml
+#
+# Decomposition of the client brief received Sep-01-2026 from KCB by email
+# (verbatim in BRIEF.md), with the client's answers of Sep-01-2026 applied
+# (verbatim in ANSWERS.md).
+#
+# All 28 questions in AMBIGUITIES.md were answered, so every requirement here is
+# `agreed` at `version: 1`. Ids are frozen from this point: never reused,
+# renumbered or renamed. A requirement whose meaning changes gets a new version
+# and a CHG- record, not an edit.
+#
+# The glossary terms used here (Photo, Upload, Original, Rendition, Gallery) are
+# now corroborated by the answers. Owner and Capture date were answered OUT of
+# scope and no requirement relies on them. See .brain/glossary.md.
+
+- id: REQ-PHOTO-001
+  title: Home page shows every stored Photo in a grid
+  module: PHOTO
+  priority: must
+  status: agreed
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "The home page should display all
+    uploaded photos in a clean and attractive gallery/grid layout"; clarified by
+    client answers, KCB, Sep-01-2026 (ANSWERS.md, questions 1, 2, 14, 15, 16, 17,
+    23).
+  rationale: >-
+    The home page is the only surface the brief names. If a Photo has been
+    uploaded and cannot be found from the home page, the person has no other
+    route to it, because there is no search, no Album and no other navigation.
+  acceptance:
+    - given: Three Photos are held by the system
+      when: The home page is requested
+      then: The page presents exactly three Photo tiles, one for each stored Photo
+    - given: A Photo is held by the system
+      when: The home page is requested
+      then: The tile for that Photo is laid out in a grid of rows and columns, not as a single vertical list of full-width images
+    - given: Photos are held by the system
+      when: The home page is requested
+      then: All Photos appear in one single collection, and no control for selecting between named collections or multiple galleries is present
+    - given: A Photo is held by the system and no credentials have been supplied
+      when: The home page is requested
+      then: The Photo is shown and no sign-in prompt or authentication challenge is presented
+    - given: Three Photos were uploaded at three different times
+      when: The home page is requested
+      then: Their tiles appear ordered by Upload date and time with the most recent first, and the ordering does not use Capture date
+    - given: More Photos are held than fit on one screen
+      when: The home page is requested
+      then: The initial response renders a bounded subset of tiles and the remainder are reached by pagination or incremental loading, rather than every stored Photo being rendered at once
+    - given: No Photo is held by the system
+      when: The home page is requested
+      then: An empty-state message inviting the person to upload a Photo is displayed, together with the "+ Upload Photo" control
+    - given: A Photo has been removed
+      when: The home page is requested
+      then: No tile for that Photo is presented
+
+- id: REQ-PHOTO-002
+  title: Each Photo in the grid is shown at thumbnail size, not at Original size
+  module: PHOTO
+  priority: must
+  status: agreed
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "with each photo shown as a
+    thumbnail"; clarified by client answers, KCB, Sep-01-2026 (ANSWERS.md,
+    questions 4, 12, 13, 15, 23).
+  acceptance:
+    - given: A Photo whose Original is larger than one grid tile
+      when: The home page is displayed
+      then: The image shown in that Photo's tile is rendered at the tile's dimensions, not at the Original's pixel dimensions
+    - given: A Photo is held by the system
+      when: The home page is displayed
+      then: The image request made for that Photo's tile returns a successful response carrying image data, and no tile shows a broken or placeholder image
+    - given: One Photo whose Original is a JPEG file and one whose Original is a PNG file
+      when: The home page is displayed
+      then: Both tiles render image data
+    - given: A Photo whose thumbnail Rendition has been generated
+      when: The home page is displayed
+      then: The image delivered for that tile is the thumbnail Rendition and is smaller in bytes than the Original, and the Original is not requested for the tile
+    - given: A Photo is held by the system
+      when: Its tile is displayed in the grid
+      then: The tile presents the image alone, with no filename, size, date or other metadata text beside it
+    - given: More Photos are held than fit on one screen
+      when: The home page is displayed
+      then: Thumbnail Renditions are requested only for the tiles currently presented, not for every stored Photo
+  depends_on:
+    - REQ-PHOTO-001
+
+- id: REQ-PHOTO-003
+  title: Home page carries a control labelled "+ Upload Photo"
+  module: PHOTO
+  priority: must
+  status: agreed
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): the sentence beginning "Add an"
+    and naming the button "+ Upload Photo" on the home page; clarified by client
+    answers, KCB, Sep-01-2026 (ANSWERS.md, questions 2, 22).
+  acceptance:
+    - given: The home page is displayed
+      when: The page content is inspected
+      then: A single activatable control bearing the text "+ Upload Photo" is present on the page
+    - given: The home page is displayed and no credentials have been supplied
+      when: The page content is inspected
+      then: The "+ Upload Photo" control is present and activatable without any sign-in step
+    - given: The home page is displayed and no pointing device is used
+      when: The person moves focus through the page with the keyboard alone
+      then: The "+ Upload Photo" control receives focus and can be activated from the keyboard
+
+- id: REQ-PHOTO-004
+  title: The upload control opens a modal over the home page without navigating away
+  module: PHOTO
+  priority: must
+  status: agreed
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "a button on the home page that
+    opens a popup/modal"; clarified by client answers, KCB, Sep-01-2026
+    (ANSWERS.md, questions 8, 21, 22).
+  rationale: >-
+    The client asked for a popup specifically rather than a separate upload
+    page, so the grid staying on screen behind the upload is part of what they
+    described, not a presentation detail.
+  acceptance:
+    - given: The home page is displayed and no modal is open
+      when: The "+ Upload Photo" control is activated
+      then: A modal is displayed in front of the home page, and the grid remains present behind it
+    - given: The home page is displayed
+      when: The "+ Upload Photo" control is activated
+      then: The browser address does not change and the home page is not reloaded
+    - given: An Upload is in progress in the modal
+      when: The person attempts to close or dismiss the modal
+      then: The modal remains open and the Upload continues until it completes or fails
+    - given: A current Chrome, Edge or Firefox browser on a desktop PC
+      when: The "+ Upload Photo" control is activated
+      then: The modal is displayed in each of those three browsers
+    - given: The upload modal is open and no pointing device is used
+      when: The person moves focus with the keyboard alone
+      then: The modal's file-choosing and submit controls receive focus and can be activated from the keyboard
+  depends_on:
+    - REQ-PHOTO-003
+
+- id: REQ-PHOTO-005
+  title: The upload modal lets a person choose an image file from their own computer
+  module: PHOTO
+  priority: must
+  status: agreed
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "where users can choose an image
+    from their computer and upload it"; clarified by client answers, KCB,
+    Sep-01-2026 (ANSWERS.md, questions 4, 5, 6, 7).
+  acceptance:
+    - given: The upload modal is open and no file has been chosen
+      when: A file is chosen from the local file system
+      then: The name of the chosen file is displayed in the modal
+    - given: The upload modal is open and no file has been chosen
+      when: The modal's submit control is activated
+      then: No Upload is started and the number of Photos held by the system is unchanged
+    - given: The upload modal is open
+      when: A file that is neither a JPEG nor a PNG is chosen
+      then: The file is rejected in the browser with an error message naming the accepted formats, and no data is transferred to the server
+    - given: The upload modal is open
+      when: A JPEG file and, separately, a PNG file are chosen
+      then: Each is accepted for Upload
+    - given: The upload modal is open
+      when: A file larger than 10 MB is chosen and submitted
+      then: The Upload is rejected, a message stating the 10 MB limit is displayed in the modal, and no Photo is created
+    - given: A file that is not an accepted image is submitted directly to the server, bypassing the browser check
+      when: The server receives it
+      then: The server rejects it on the basis of the file content and type, and no Photo is created
+    - given: The upload modal is open
+      when: The file chooser is used
+      then: Exactly one file can be selected, and selecting several files at once is not offered
+  depends_on:
+    - REQ-PHOTO-004
+
+- id: REQ-PHOTO-006
+  title: A submitted image file becomes a new Photo held by the system
+  module: PHOTO
+  priority: must
+  status: agreed
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "choose an image from their
+    computer and upload it" and "the new photo should be added to the gallery";
+    clarified by client answers, KCB, Sep-01-2026 (ANSWERS.md, questions 2, 10,
+    11, 12, 25).
+  acceptance:
+    - given: An acceptable image file has been chosen in the upload modal
+      when: The modal's submit control is activated and the Upload completes
+      then: The number of Photos held by the system has increased by exactly one
+    - given: An Upload has completed successfully
+      when: The home page is requested afresh
+      then: The newly created Photo is among the tiles presented
+    - given: The same image file is uploaded twice
+      when: Both Uploads complete
+      then: Two Photos are held by the system and two separate tiles are presented, not one
+    - given: An Upload has completed successfully
+      when: The stored Original is compared with the file that was chosen
+      then: The stored Original is byte-identical to the chosen file, and no control offering to download the Original is presented
+    - given: An Upload has completed successfully
+      when: The Photo's stored files are inspected
+      then: A thumbnail Rendition smaller than the Original has been generated and stored for that Photo
+    - given: The available local disk space is exhausted
+      when: An Upload is submitted
+      then: The Upload fails with a message to the person, and no Photo record and no partial file remain
+  depends_on:
+    - REQ-PHOTO-005
+
+- id: REQ-PHOTO-007
+  title: An Upload that fails is reported to the person and creates no Photo
+  module: PHOTO
+  priority: must
+  status: agreed
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "choose an image from their
+    computer and upload it". The brief did not describe failure at all; the
+    failure path was confirmed and specified by client answers, KCB, Sep-01-2026
+    (ANSWERS.md, questions 5, 6, 8, 9).
+  rationale: >-
+    An Upload that fails silently is indistinguishable from one that succeeded,
+    and the person's own copy of the file is the only remaining record. What the
+    person is told, and whether anything is left behind, decides whether they
+    upload again or believe the Photo is safe.
+  acceptance:
+    - given: An Upload has been submitted and the system cannot complete it
+      when: The attempt ends
+      then: A failure message is displayed in the modal and the modal does not close by itself
+    - given: An Upload has been submitted and the system cannot complete it
+      when: The attempt ends
+      then: The number of Photos held by the system is unchanged from before the attempt
+    - given: An Upload has failed part-way
+      when: The failure message is displayed
+      then: The person can submit the same file again from the modal without reopening it
+    - given: An Upload has failed part-way after some data was written
+      when: The stored Photos and stored files are inspected
+      then: No Photo record and no partial file remain from the failed attempt
+  depends_on:
+    - REQ-PHOTO-006
+
+- id: REQ-PHOTO-008
+  title: A newly uploaded Photo appears in the grid without the page being reloaded
+  module: PHOTO
+  priority: must
+  status: agreed
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "After uploading, the new photo
+    should be added to the gallery and immediately displayed in the grid";
+    clarified by client answers, KCB, Sep-01-2026 (ANSWERS.md, questions 3, 14,
+    18, 24).
+  acceptance:
+    - given: The home page is open showing N Photo tiles
+      when: An Upload completes successfully in the modal
+      then: The grid presents N+1 tiles, one of which is the new Photo, without the person reloading the page
+    - given: The uploading person's home page is open
+      when: Their Upload completes successfully
+      then: The new tile appears in their own open grid without a full page reload, and no update of any other person's already-open grid is required
+    - given: The grid is ordered with the most recent Upload first
+      when: An Upload completes successfully
+      then: The new tile appears in the first position of the grid
+  depends_on:
+    - REQ-PHOTO-001
+    - REQ-PHOTO-006
+
+- id: REQ-PHOTO-009
+  title: Activating a Photo in the grid opens that Photo in a larger view
+  module: PHOTO
+  priority: must
+  status: agreed
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "Clicking any photo should open
+    it in a larger view so the user can see it properly"; clarified by client
+    answers, KCB, Sep-01-2026 (ANSWERS.md, questions 2, 11, 13, 19, 20, 21, 22).
+  acceptance:
+    - given: The home page is displayed with at least two Photos
+      when: One Photo's tile is activated
+      then: That same Photo is presented in a larger view, and the Photo shown is the one whose tile was activated
+    - given: A Photo's tile is displayed at the grid's tile dimensions
+      when: That tile is activated
+      then: The Photo is rendered in the larger view at greater width and height than the tile
+    - given: The home page is displayed
+      when: A Photo's tile is activated
+      then: The larger view is presented as an overlay in front of the home page, the browser address does not change, and the home page is not replaced by a separate Photo page
+    - given: A Photo is open in the larger view
+      when: The displayed image is inspected
+      then: The image delivered is the Photo's Original, not its thumbnail Rendition, and it is sized to fit within the available viewport
+    - given: A Photo is open in the larger view
+      when: The larger view is inspected
+      then: The image is presented alone, with no filename, size, date or other metadata text
+    - given: A Photo is open in the larger view and at least two Photos are held
+      when: The next control is activated and then the previous control is activated
+      then: The larger view shows the following Photo and then returns to the Photo it started on
+    - given: A Photo's tile has keyboard focus and no pointing device is used
+      when: The Enter key is pressed
+      then: That Photo opens in the larger view
+  depends_on:
+    - REQ-PHOTO-001
+
+- id: REQ-PHOTO-010
+  title: The larger view can be dismissed and returns the person to the grid
+  module: PHOTO
+  priority: must
+  status: agreed
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "Clicking any photo should open
+    it in a larger view". The brief did not say how the larger view is left; the
+    close control and the Escape key were specified by client answers, KCB,
+    Sep-01-2026 (ANSWERS.md, questions 19, 20, 22).
+  acceptance:
+    - given: A Photo is open in the larger view
+      when: The person dismisses the larger view
+      then: The larger view is no longer displayed and the grid of Photo tiles is displayed again
+    - given: A Photo is open in the larger view
+      when: The close control is activated
+      then: The larger view closes and the grid is displayed again
+    - given: A Photo is open in the larger view and no pointing device is used
+      when: The Escape key is pressed
+      then: The larger view closes and the grid is displayed again
+  depends_on:
+    - REQ-PHOTO-009
+
+- id: REQ-PHOTO-011
+  title: The home page fits the viewport without horizontal scrolling
+  module: PHOTO
+  priority: must
+  status: agreed
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "The application should be
+    simple, responsive, easy to run on a local development PC"; clarified by
+    client answers, KCB, Sep-01-2026 (ANSWERS.md, questions 21, 22, 23).
+  acceptance:
+    - given: A current Chrome, Edge or Firefox browser at a common desktop viewport width
+      when: The home page is displayed with at least one Photo
+      then: The grid reflows to fit the viewport and the document's scrollable width does not exceed the viewport width
+    - given: A current Chrome, Edge or Firefox browser at a common desktop viewport width
+      when: The home page is displayed
+      then: The "+ Upload Photo" control is visible within the viewport and can be activated without horizontal scrolling
+    - given: The home page is displayed at a supported desktop viewport width
+      when: The grid is inspected
+      then: Photo tiles are laid out with uniform spacing between them, and no tile overlaps another tile or the "+ Upload Photo" control
+    - given: The home page is displayed and no pointing device is used
+      when: The person moves focus with the keyboard alone
+      then: Every control needed to upload a Photo and to open and close the larger view can be reached and activated from the keyboard
+  depends_on:
+    - REQ-PHOTO-001
+
+- id: REQ-PHOTO-012
+  title: An uploaded Photo remains in the Gallery in a later browser session
+  module: PHOTO
+  priority: must
+  status: agreed
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "use a simple data store";
+    clarified by client answers, KCB, Sep-01-2026 (ANSWERS.md, questions 2, 11,
+    17, 24, 25).
+  rationale: >-
+    "Data store" is the client's own word for the thing that keeps Photos. A
+    Photo that exists only in the page that uploaded it would satisfy every
+    other sentence in the brief and still lose the client's photographs.
+  acceptance:
+    - given: A Photo was uploaded during an earlier browser session
+      when: The home page is opened in a new browser session with no retained client-side state
+      then: That Photo is present among the tiles in the grid
+    - given: A Photo was uploaded before the application was stopped
+      when: The application is started again and the home page is requested
+      then: That Photo is present among the tiles in the grid
+    - given: A Photo was uploaded before the PC was shut down
+      when: The PC is started, the application is started, and the home page is requested
+      then: That Photo is present among the tiles in the grid
+    - given: A Photo was uploaded in an earlier session
+      when: Its stored Original is compared with the file that was chosen
+      then: The stored Original is byte-identical to it
+    - given: A Photo has been removed
+      when: The home page is opened in a later session
+      then: That Photo is not present, and the application offers no means of recovering it
+  depends_on:
+    - REQ-PHOTO-006
+
+- id: REQ-PHOTO-013
+  title: The application runs on the Node.js runtime
+  module: PHOTO
+  priority: must
+  status: verified
+  verified_by:
+    - tests/boot.test.js
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "Create a simple and modern Photo
+    Gallery application using Node.js"; clarified by client answers, KCB,
+    Sep-01-2026 (ANSWERS.md, question 27).
+  acceptance:
+    - given: A machine on which Node.js is the only installed language runtime
+      when: The application is started by its documented start procedure
+      then: The application starts and serves the home page, requiring no other language runtime to be installed
+    - given: A Windows PC with a current Node.js LTS release installed
+      when: The application is started by its documented start procedure
+      then: The application starts and serves the home page
+
+- id: REQ-PHOTO-014
+  title: The application starts and serves the home page on a single local development PC
+  module: PHOTO
+  priority: must
+  status: verified
+  verified_by:
+    - tests/boot.test.js
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "easy to run on a local
+    development PC"; clarified by client answers, KCB, Sep-01-2026 (ANSWERS.md,
+    questions 3, 27, 28).
+  acceptance:
+    - given: A local development PC with the prerequisites the client has agreed to
+      when: The documented start procedure is followed from a clean checkout
+      then: The home page is reachable from a browser on that same PC and returns a successful response
+    - given: A Windows PC on which a current Node.js LTS release is installed and nothing else has been prepared
+      when: The documented install command and then the documented run command are executed from a clean checkout
+      then: The home page is reachable from a browser on that PC, with no database server, container runtime or cloud service required
+    - given: The application is running on one local development PC
+      when: One person uses it from a browser on that PC
+      then: The application serves that person, and no capability for several people using it at the same time is required
+  depends_on:
+    - REQ-PHOTO-013
+
+- id: REQ-PHOTO-015
+  title: The application's third-party dependencies are limited to an approved list
+  module: PHOTO
+  priority: should
+  status: agreed
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "avoid unnecessary dependencies";
+    clarified by client answers, KCB, Sep-01-2026 (ANSWERS.md, question 26).
+  rationale: >-
+    The client raised dependencies unprompted, which suggests they expect to be
+    able to read and maintain the result themselves. The answer of Sep-01-2026
+    gives the test for necessity and the three purposes that qualify.
+  acceptance:
+    - given: The delivered application
+      when: Its declared third-party runtime dependencies are listed
+      then: Every entry provides functionality that is not reasonably available from the Node.js standard library or the application's own code
+    - given: The delivered application
+      when: Its declared third-party runtime dependencies are listed
+      then: Each entry serves the web server, SQLite access or image thumbnail generation, and no entry serves any other purpose

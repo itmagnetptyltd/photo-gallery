@@ -49,80 +49,57 @@ they diverge, that divergence is itself worth writing down.
 
 ## Agreed terms
 
-_(none yet — nothing below has been through the client)_
+Settled by KCB's answers of Sep-01-2026 (`requirements/ANSWERS.md`). These words,
+spelled this way, in requirements, code, tests and conversation.
+
+**Gallery** — the whole application, together with the single collection of
+Photos it holds.
+- **Identified by:** nothing. There is exactly one, so it is never referred to by
+  name or id.
+- **Note:** there are no named collections and no second Gallery. "Gallery" and
+  "the application" are the same thing.
+
+**Photo** — one still image held by the Gallery, created by one Upload.
+- **Not to be confused with:** the *Original* or a *Rendition*, which are the
+  files a Photo is made of.
+- **Identified by:** the Upload that created it. Uploading the same file twice
+  creates two Photos, not one.
+
+**Original** — the image file exactly as the person chose it, stored unchanged.
+- **Identified by:** its Photo. One Photo, one Original.
+- **Note:** shown in the larger view. There is no download control.
+
+**Rendition** — a smaller image file the application generates from an Original.
+- **Note:** at present there is exactly one kind, the thumbnail used in the grid.
+
+**Upload** — one person putting one image file into the Gallery, from the modal.
+- **Note:** one file per Upload. An Upload that fails creates no Photo and leaves
+  no partial file.
+
+**Grid** — the layout of Photo tiles on the home page, newest Upload first.
+
+**Larger view** — the overlay on the home page that shows one Photo's Original
+sized to the viewport.
+- **Not to be confused with:** a separate page. It is an overlay; the address
+  does not change.
 
 ---
 
-## Proposed terms — NOT AGREED
+## Deliberately out of scope
 
-> **Nothing in this section is settled.** There is no brief, no BRD and no source
-> document in this repository; these were drafted from the project name alone.
-> Each entry is a **proposal to be confirmed or corrected by the client**. A term
-> moves up into *Agreed terms* only after they have said so. Until then no
-> requirement may cite one of these as fixed.
+Recorded so their absence is known, not overlooked. Each was proposed, put to the
+client, and answered out of scope on Sep-01-2026.
 
-**Photo** — a single image held by the system, together with the metadata
-captured with it.
-- **Not to be confused with:** a *Rendition*. The Photo is the thing; a Rendition
-  is one file the system generated from it.
-- **Identified by:** proposed — a system-issued photo reference, not the filename.
-  Two uploads of the same file are two Photos unless the client says otherwise.
+- **Owner** — there is no owner and no sign-in. Every Photo is visible to anyone
+  who can reach the application.
+- **Capture date** — ordering uses Upload date. Capture date is not read.
+- **Album**, **Share link** — never mentioned by the client, and answer 1 confirms
+  there are no named collections. Neither term is in use.
 
-**Rendition** — a derived file produced from a Photo for a particular use:
-thumbnail, web-size, full-size.
-- **Not to be confused with:** the *Original*, which is the bytes as uploaded and
-  is never modified.
-
-**Album** — a named group of Photos, assembled deliberately by an Owner.
-- **Not to be confused with:** a *Gallery*. An Album is the grouping; a Gallery is
-  where a grouping is shown.
-- **Identified by:** proposed — an album reference issued at creation.
-
-**Gallery** — the viewer-facing surface on which one or more Albums are
-presented.
-- **Note:** the project is itself named "photo-gallery", so this word is already
-  overloaded. Confirming or replacing it is the first question below.
-
-**Owner** — the person who uploaded a Photo and controls who may see it.
-- **Not to be confused with:** a *Viewer*, who can see a Photo but cannot change
-  or reshare it.
-
-**Upload** — the act of a person putting a file into the system.
-- **Not to be confused with:** an *Import*, a bulk transfer from another source.
-  Whether both exist is unconfirmed.
-
-**Capture date** — when the photograph was taken, per its embedded metadata.
-- **Not to be confused with:** the *Upload date*, when the system received it.
-  These differ routinely and sorting is meaningless until the client says which
-  one they mean by "date".
-
-**Share link** — a URL that grants a non-Owner access to an Album or Photo.
-
----
-
-## Open questions the client must answer
-
-These are ambiguities, not choices for the delivery team. Each needs a matching
-entry in `requirements/AMBIGUITIES.md` before any requirement that depends on it
-can reach `agreed`.
-
-1. **Does "gallery" mean the product, or one collection inside it?** The name
-   suggests both readings. Every other term depends on this one.
-2. **Can one Photo belong to more than one Album?** Determines whether the
-   relationship is a hierarchy or a many-to-many, and it is expensive to reverse.
-3. **Does "photo" include video?** If yes, "Photo" is the wrong word entirely and
-   should be settled now rather than after the schema exists.
-4. **What happens on delete — removed, or recoverable?** If there is a recovery
-   period, "deleted" is a state and needs its own term.
-5. **What visibility states exist for an Album?** Public, private and link-only
-   are three different products; the client has named none of them.
-6. **When they say "date", do they mean Capture date or Upload date?**
+Any of these arriving later is a variation, not a gap: `/find-variation`.
 
 ---
 
 ## Appears in source documents, not yet defined
 
-No client source document has been supplied to this repository. When a brief,
-BRD or meeting note arrives, run `/decompose` and record undefined terms here.
-
-- _(none yet — no source documents exist)_
+- _(none — every term the brief used was settled on Sep-01-2026)_
