@@ -570,8 +570,6 @@ function buildPlan({
 
   if (resolvedProfile.warning) warnings.push(resolvedProfile.warning);
 
-  const brainExists = fs.existsSync(path.join(resolvedTarget, ".brain"));
-
   for (const entry of PAYLOAD) {
     const sourceDir = path.join(resolvedToolkit, entry.source);
     const files = listFiles(sourceDir);
@@ -583,8 +581,6 @@ function buildPlan({
       continue;
     }
 
-    const blocked = entry.onceOnly && brainExists;
-
     for (const relative of files) {
       // A file this run's profile does not include is left out of the plan
       // entirely — not written, and not recorded — so the existing prune
@@ -593,13 +589,27 @@ function buildPlan({
       if (entry.filter && !entry.filter(relative, resolvedProfile.profile))
         continue;
 
+      const destination = path.join(resolvedTarget, entry.destination, relative);
+
+      // `onceOnly` exists to stop a record being overwritten. It used to test
+      // whether .brain/ existed at all, which meant a scaffold file added by a
+      // later toolkit version could never reach a project installed before it —
+      // .brain/slices.yaml never arrived in any project that already had a
+      // brain, and there was no way to get it other than typing it out.
+      //
+      // A file that is not there cannot be overwritten, so the test is now the
+      // file's own existence: the same rule SINGLE_FILES has always applied to
+      // CLAUDE.md and prompt-changes.md. The policy stays `seeded` — written
+      // once, the project's own from then on, and never pruned.
+      const blocked = entry.onceOnly && fs.existsSync(destination);
+
       actions.push({
         action: blocked ? "skip" : "write",
         reason: blocked
-          ? "the project already has a .brain/ — its record is never overwritten"
+          ? "already present — the project's record is never overwritten"
           : null,
         source: path.join(sourceDir, relative),
-        destination: path.join(resolvedTarget, entry.destination, relative),
+        destination,
         key: toPosix(path.join(entry.destination, relative)),
         policy: entry.policy,
       });

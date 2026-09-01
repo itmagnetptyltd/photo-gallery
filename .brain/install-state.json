@@ -2,10 +2,10 @@
   "stateVersion": 1,
   "toolkit": "itm-sdlc",
   "version": "1.0.0",
-  "commit": "14d89dad2cdd95210b20df9221b4574f7daef001",
+  "commit": "284db02bf48067ddcb248325d79c5aa691507be1",
   "ref": "kcb-dev-v1",
   "remote": "https://github.com/itmagnetptyltd/itm-sdlc.git",
-  "installedAt": "2026-09-01T03:25:39.641Z",
+  "installedAt": "2026-09-01T04:47:18.826Z",
   "modules": [
     "PHOTO"
   ],
@@ -192,7 +192,7 @@
       "policy": "managed"
     },
     ".claude/itm-sdlc/scripts/dashboard.js": {
-      "sha256": "eef27940cad5b895ad759d747a57adeae305c9081ba51fa9edbbec8db784b66d",
+      "sha256": "55ed86f409bffcc5dfd400664c1bf227f25ec422407de1347897d3f31ceb646a",
       "policy": "managed"
     },
     ".claude/itm-sdlc/scripts/gate-scope.js": {
@@ -228,7 +228,7 @@
       "policy": "managed"
     },
     ".claude/itm-sdlc/scripts/lib/installer.js": {
-      "sha256": "3fad45eca3c7865119bae47d03eaf2bc12fbc59e1fe5fe6805140232e3129be3",
+      "sha256": "45f41c7811e9bbc9a5a349c4eb966d2fbab48b4bda87fcfa681a14d9a82779f2",
       "policy": "managed"
     },
     ".claude/itm-sdlc/scripts/lib/requirements.js": {
@@ -316,7 +316,7 @@
       "policy": "seeded"
     },
     ".brain/glossary.md": {
-      "sha256": "917d303f27226f6a85e755a47a440cfce500d9fdeb33f4e8366efcc9605891da",
+      "sha256": "579ac9a77ab92d2c1f045d9ab89d993cf344ed382f31ff20a0ba75104c03fad2",
       "policy": "seeded"
     },
     ".brain/index.md": {
@@ -333,6 +333,10 @@
     },
     ".brain/sessions/README.md": {
       "sha256": "2f4c7e20e2bfd9762d63e3db8158b120fabd740f436283709f45ed5ca179d216",
+      "policy": "seeded"
+    },
+    ".brain/slices.yaml": {
+      "sha256": "6385d4f5919101bec72dfada3a1300d2bef0a25870248ebfed0df3fe4d1aef41",
       "policy": "seeded"
     },
     "CLAUDE.md": {

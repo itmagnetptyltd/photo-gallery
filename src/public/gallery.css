@@ -1,0 +1,54 @@
+:root {
+  --tile-min: 12rem;
+  --gap: 1rem;
+}
+
+body {
+  margin: 0;
+  padding: var(--gap);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.upload-control {
+  padding: 0.5rem 0.9rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Rows and columns, not one vertical list of full-width images. */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--tile-min), 1fr));
+  gap: var(--gap);
+  margin: var(--gap) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #eceff1;
+}
+
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.empty-state {
+  margin: var(--gap) 0;
+  color: #546e7a;
+}
+
+.more {
+  display: inline-block;
+  margin-top: var(--gap);
+}
