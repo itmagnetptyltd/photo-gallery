@@ -18,6 +18,7 @@ const {
   STATUS_ORDER,
 } = require("./lib/requirements");
 const { computeReport } = require("./client-report");
+const { readSlices } = require("./lib/slices");
 
 const EXIT_OK = 0;
 const EXIT_TOOL_ERROR = 2;
@@ -69,10 +70,13 @@ function collect(projectRoot) {
     }
   }
 
+  const slices = readSlices(projectRoot, requirements);
+
   return {
     project: path.basename(projectRoot),
     generatedAt: new Date().toISOString(),
     matrix,
+    slices,
     counts: {
       requirements: matrix.summary.total,
       byStatus: matrix.summary.byStatus,
@@ -187,6 +191,32 @@ function renderHtml(data) {
         })
         .join("")
     : '<li class="empty">No versioned requirements yet.</li>';
+
+  const slices = data.slices;
+  const sliceRows = slices.slices
+    .map((slice) => {
+      const ids = slice.members
+        .map(
+          (m) =>
+            `<code class="${m.missing ? "gone" : escapeHtml(m.status)}" title="${escapeHtml(m.missing ? "not in the requirement record" : m.status)}">${escapeHtml(m.id)}</code>`,
+        )
+        .join(" ");
+      const branch = slice.branch
+        ? `<code class="branch">${escapeHtml(slice.branch)}</code>`
+        : "—";
+      return `<tr data-slice-state="${escapeHtml(slice.state)}"><td>${escapeHtml(String(slice.id))}</td><td>${escapeHtml(slice.name)}<p class="why">${escapeHtml(truncate(slice.why, 150))}</p></td><td class="ids">${ids}</td><td>${branch}</td><td><span class="pill slice-${escapeHtml(slice.state)}">${escapeHtml(slice.label)}</span><span class="of">${slice.doneCount}/${slice.total}</span></td></tr>`;
+    })
+    .join("");
+
+  const sliceNote = !slices.present
+    ? `<p class="empty-note">No <code>${escapeHtml(slices.file)}</code> in this project. Requirement order is the client's; slice order is a delivery decision, and until it is written down there is nothing here to show.</p>`
+    : slices.problems.length
+      ? `<ul class="problems">${slices.problems.map((m) => `<li>${escapeHtml(m)}</li>`).join("")}</ul>`
+      : "";
+
+  const unplanned = slices.present && slices.unplanned.length
+    ? `<p class="empty-note">Not in any slice: ${slices.unplanned.map((id) => `<code>${escapeHtml(id)}</code>`).join(" ")}</p>`
+    : "";
 
   const pager = (label) =>
     `<nav class="pager" aria-label="${escapeHtml(label)} pages">
@@ -452,6 +482,22 @@ function renderHtml(data) {
   .pill.in_progress { background: #ffedd5; color: var(--in_progress); }
   .pill.verified { background: #dcfce7; color: var(--verified); }
   .pill.signed_off { background: #ccfbf1; color: var(--signed_off); }
+  .pill.slice-blocked { background: #fee2e2; color: #b42318; }
+  .pill.slice-not_started { background: #f0ece6; color: var(--draft); }
+  .pill.slice-in_progress { background: #ffedd5; color: var(--in_progress); }
+  .pill.slice-done { background: #dcfce7; color: var(--verified); }
+  table.slices .why { margin: 2px 0 0; font-size: 11px; color: var(--muted); }
+  table.slices .ids { line-height: 1.9; }
+  table.slices .ids code { padding: 1px 5px; border-radius: 4px; background: #f0ece6; }
+  table.slices .ids code.verified, table.slices .ids code.signed_off { background: #dcfce7; }
+  table.slices .ids code.in_progress { background: #ffedd5; }
+  table.slices .ids code.draft { background: #fee2e2; }
+  table.slices .ids code.gone { background: #fee2e2; text-decoration: line-through; }
+  table.slices .of { margin-left: 6px; font-size: 11px; color: var(--muted); }
+  code.branch { font-size: 11px; color: var(--muted); }
+  .empty-note { margin: 0 0 10px; font-size: 12px; color: var(--muted); }
+  .problems { margin: 0 0 10px; font-size: 12px; color: var(--warn); }
+  .problems li { padding: 2px 0; }
   .warn-cell { color: var(--warn); font-weight: 600; }
   ul { margin: 0; padding: 0; list-style: none; }
   .records li, .hist {
@@ -497,6 +543,18 @@ function renderHtml(data) {
           <ul>${hist}</ul>
         </section>
       </div>
+
+      <section class="panel">
+        <h2>Delivery slices <span class="count">${slices.slices.length}</span></h2>
+        ${sliceNote}
+        <div class="table-wrap">
+          <table class="slices">
+            <thead><tr><th>#</th><th>Slice</th><th>Covers</th><th>Branch</th><th>Status</th></tr></thead>
+            <tbody>${sliceRows || '<tr><td colspan="5">No slices defined.</td></tr>'}</tbody>
+          </table>
+        </div>
+        ${unplanned}
+      </section>
 
       <section class="panel grow">
         <h2>Requirements</h2>
