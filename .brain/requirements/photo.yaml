@@ -17,7 +17,7 @@
   title: Home page shows every stored Photo in a grid
   module: PHOTO
   priority: must
-  status: agreed
+  status: in_progress
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "The home page should display all
