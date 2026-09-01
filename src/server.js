@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 import { listPhotos, countPhotos, getStore, PAGE_SIZE } from './photos.js'
-import { renderHomePage } from './home-page.js'
+import { renderHomePage, renderTile } from './home-page.js'
 import { MAX_UPLOAD_BYTES, sniffImageType } from './upload-rules.js'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
@@ -88,8 +88,9 @@ const receiveUpload = async (request, response) => {
     return refuse(response, 415, 'That file is not a JPEG or PNG image.')
   }
 
+  let photo
   try {
-    await getStore().savePhoto({
+    photo = await getStore().savePhoto({
       bytes,
       filename: request.headers['x-filename'] ?? 'photo',
       type: sniffImageType(bytes),
@@ -98,8 +99,24 @@ const receiveUpload = async (request, response) => {
     return refuse(response, 500, 'That image could not be stored.')
   }
 
-  response.writeHead(201, { 'content-type': 'text/plain; charset=utf-8' })
-  response.end('Created.')
+  // The new Photo's tile, rendered by the same function the Grid uses, so tile
+  // markup never exists in two places. The page inserts this without reloading
+  // (REQ-PHOTO-008).
+  response.writeHead(201, { 'content-type': 'text/html; charset=utf-8' })
+  response.end(renderTile(photo))
+}
+
+/** Serves a Photo's Rendition. The Original is REQ-PHOTO-009's business. */
+const sendThumbnail = async (id, response) => {
+  let bytes
+  try {
+    bytes = await getStore().readThumbnail(id)
+  } catch {
+    return refuse(response, 404, 'No such photo.')
+  }
+
+  response.writeHead(200, { 'content-type': 'image/png' })
+  response.end(bytes)
 }
 
 /** Builds the application's HTTP server without binding it to a port. */
@@ -124,6 +141,12 @@ export const createServer = () =>
 
     if (url.pathname === '/uploads' && request.method === 'POST') {
       await receiveUpload(request, response)
+      return
+    }
+
+    const thumbnail = /^\/photos\/([^/]+)\/thumbnail$/.exec(url.pathname)
+    if (thumbnail) {
+      await sendThumbnail(decodeURIComponent(thumbnail[1]), response)
       return
     }
 
