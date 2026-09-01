@@ -1,0 +1,50 @@
+# Delivery slices for the Photo Gallery.
+#
+# Requirement ids are the client's order — the order their brief mentioned
+# things. Slice order is ours: which increments can be demonstrated, and when.
+# The first slice is 013/014, not 001, because nothing can be requested from a
+# home page until the application starts and serves one.
+#
+# One slice is one branch, one /feature-plan, one /tdd, one pull request.
+
+- id: 1
+  name: Boot
+  branch: feat/photo-boot
+  why: Node runtime, one documented command, home page returns a successful response. Nothing works before this.
+  covers: [REQ-PHOTO-013, REQ-PHOTO-014]
+
+- id: 2
+  name: Grid
+  branch: feat/photo-grid
+  why: The home page renders every stored Photo — newest first, bounded first render, empty state. Photos are seeded in tests; upload does not exist yet.
+  covers: [REQ-PHOTO-001]
+
+- id: 3
+  name: Upload modal
+  branch: feat/photo-upload-modal
+  why: Control opens a modal over the grid, a file is chosen, and type and size are rejected in the browser and again at the server. Nothing is stored yet.
+  covers: [REQ-PHOTO-003, REQ-PHOTO-004, REQ-PHOTO-005]
+
+- id: 4
+  name: Store
+  branch: feat/photo-store
+  why: The Upload actually stores — Original byte-identical, thumbnail Rendition generated, a failure leaves no record and no partial file, and the Photo survives a restart. 012 is 006's persistence proof and belongs in the same slice.
+  covers: [REQ-PHOTO-006, REQ-PHOTO-007, REQ-PHOTO-012]
+
+- id: 5
+  name: Thumbnails and live insert
+  branch: feat/photo-thumbnails
+  why: Tiles serve the thumbnail Rendition rather than the Original, and a completed Upload appears in the grid without a page reload. Both need the Renditions slice 4 creates.
+  covers: [REQ-PHOTO-002, REQ-PHOTO-008]
+
+- id: 6
+  name: Larger view
+  branch: feat/photo-lightbox
+  why: Activating a tile opens the Original as an overlay with next and previous, dismissed by the close control or Escape.
+  covers: [REQ-PHOTO-009, REQ-PHOTO-010]
+
+- id: 7
+  name: Responsive and dependency audit
+  branch: feat/photo-responsive
+  why: No horizontal scrolling, uniform tile spacing, every control keyboard-reachable, and the third-party dependency list justified. Both are end-of-build sweeps over work the earlier slices produced.
+  covers: [REQ-PHOTO-011, REQ-PHOTO-015]
