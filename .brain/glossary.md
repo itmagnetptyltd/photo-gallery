@@ -102,27 +102,40 @@ presented.
 
 ## Open questions the client must answer
 
-These are ambiguities, not choices for the delivery team. Each needs a matching
-entry in `requirements/AMBIGUITIES.md` before any requirement that depends on it
-can reach `agreed`.
+These are ambiguities, not choices for the delivery team. They are **recorded in
+full** in `requirements/AMBIGUITIES.md`, which is the single register — this
+section only says where each one went, so the two cannot drift apart.
 
-1. **Does "gallery" mean the product, or one collection inside it?** The name
-   suggests both readings. Every other term depends on this one.
-2. **Can one Photo belong to more than one Album?** Determines whether the
-   relationship is a hierarchy or a many-to-many, and it is expensive to reverse.
-3. **Does "photo" include video?** If yes, "Photo" is the wrong word entirely and
-   should be settled now rather than after the schema exists.
-4. **What happens on delete — removed, or recoverable?** If there is a recovery
-   period, "deleted" is a state and needs its own term.
-5. **What visibility states exist for an Album?** Public, private and link-only
-   are three different products; the client has named none of them.
-6. **When they say "date", do they mean Capture date or Upload date?**
+| Glossary question | Now recorded as |
+|---|---|
+| Does "gallery" mean the product, or one collection inside it? | Ambiguity 1 |
+| Does "photo" include video? | Ambiguity 4 |
+| Are two uploads of the same file one Photo or two? | Ambiguity 10 |
+| What happens on delete — removed, or recoverable? | Ambiguity 17 |
+| When they say "date", Capture date or Upload date? | Ambiguity 14 |
+| What visibility states exist? | Ambiguities 2 and 3 |
+
+**Album and Share link were not corroborated.** The brief of Sep-01-2026 never
+mentions albums, sharing, sign-in or ownership. Those two proposed terms are
+therefore not merely unconfirmed but unsupported by any source document, and no
+requirement cites them. Absence of scope is not scope — they stay listed above
+only so that a later brief has somewhere to land.
 
 ---
 
 ## Appears in source documents, not yet defined
 
-No client source document has been supplied to this repository. When a brief,
-BRD or meeting note arrives, run `/decompose` and record undefined terms here.
+Used by the client in the brief of Sep-01-2026 without settling what they mean.
+Each has a matching question in `requirements/AMBIGUITIES.md`.
 
-- _(none yet — no source documents exist)_
+- **gallery** — used for both the application and the grid of photos (ambiguity 1)
+- **grid** / **gallery layout** — no column count, breakpoint or ordering given (ambiguities 14, 21)
+- **thumbnail** — a generated smaller Rendition, or the Original shown small? (ambiguity 12)
+- **larger view** — overlay, separate page, and at what resolution? (ambiguity 19)
+- **popup** / **modal** — used interchangeably in one sentence (REQ-PHOTO-004)
+- **simple data store** — no durability, location or format given (ambiguities 24, 25)
+- **responsive** — no devices, browsers or viewport widths named (ambiguity 21)
+- **immediately** — for the uploader only, or for other people already viewing? (ambiguity 18)
+- **simple**, **modern**, **clean and attractive**, **user-friendly** — no observable standard, and no named judge (ambiguity 23)
+- **unnecessary dependencies** — no definition of necessary, and no approver (ambiguity 26)
+- **easy to run on a local development PC** — no step count, no prerequisites (ambiguity 28)

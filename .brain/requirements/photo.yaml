@@ -1,0 +1,371 @@
+# .brain/requirements/photo.yaml
+#
+# Decomposition of the client brief received Sep-01-2026 from KCB by email
+# (verbatim in .brain/requirements/BRIEF.md).
+#
+# Every requirement here is `draft` at `version: 1`. Nothing in this file is
+# agreed, and nothing in it may be treated as settled: the brief is six
+# sentences long and every open question it leaves is recorded in
+# AMBIGUITIES.md, which is the same list as the `ambiguities` entries below.
+#
+# The glossary terms used here (Photo, Upload, Original, Rendition, Gallery,
+# Owner, Capture date, Upload date) are themselves PROPOSED and NOT AGREED —
+# see .brain/glossary.md. Using them is not confirmation of them.
+
+- id: REQ-PHOTO-001
+  title: Home page shows every stored Photo in a grid
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "The home page should display all
+    uploaded photos in a clean and attractive gallery/grid layout".
+  rationale: >-
+    The home page is the only surface the brief names. If a Photo has been
+    uploaded and cannot be found from the home page, the person has no other
+    route to it, because the brief describes no search, no Album and no
+    navigation of any other kind.
+  acceptance:
+    - given: Three Photos are held by the system
+      when: The home page is requested
+      then: The page presents exactly three Photo tiles, one for each stored Photo
+    - given: A Photo is held by the system
+      when: The home page is requested
+      then: The tile for that Photo is laid out in a grid of rows and columns, not as a single vertical list of full-width images
+  ambiguities:
+    - Does "gallery" mean the whole application, or one named collection of Photos inside it?
+    - Is there any concept of an Owner or of signing in at all, or is every Photo visible to anyone who can reach the application?
+    - In what order must Photos appear in the grid, and when the client says "date" do they mean Capture date or Upload date?
+    - What must happen when there are more Photos than fit on one screen — does "all uploaded photos" still mean all of them at 10,000?
+    - What must the home page show when no Photo has been uploaded yet?
+    - Must an existing Photo ever be removed or renamed by anyone, and if it is removed, is it recoverable?
+    - Who decides whether the interface is "clean", "attractive" and "user-friendly", and what evidence would make it acceptable or unacceptable?
+
+- id: REQ-PHOTO-002
+  title: Each Photo in the grid is shown at thumbnail size, not at Original size
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "with each photo shown as a
+    thumbnail".
+  acceptance:
+    - given: A Photo whose Original is larger than one grid tile
+      when: The home page is displayed
+      then: The image shown in that Photo's tile is rendered at the tile's dimensions, not at the Original's pixel dimensions
+    - given: A Photo is held by the system
+      when: The home page is displayed
+      then: The image request made for that Photo's tile returns a successful response carrying image data, and no tile shows a broken or placeholder image
+  ambiguities:
+    - Does "photo" cover still images only, and which file formats must be accepted?
+    - Is the thumbnail a separate smaller Rendition produced by the system, or the Original delivered whole and shown at a reduced size?
+    - What information about a Photo, if any, must be shown beside it in the grid or in the larger view?
+    - What must happen when there are more Photos than fit on one screen — does "all uploaded photos" still mean all of them at 10,000?
+    - Who decides whether the interface is "clean", "attractive" and "user-friendly", and what evidence would make it acceptable or unacceptable?
+  depends_on:
+    - REQ-PHOTO-001
+
+- id: REQ-PHOTO-003
+  title: Home page carries a control labelled "+ Upload Photo"
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): the sentence beginning "Add an"
+    and naming the button "+ Upload Photo" on the home page.
+  acceptance:
+    - given: The home page is displayed
+      when: The page content is inspected
+      then: A single activatable control bearing the text "+ Upload Photo" is present on the page
+  ambiguities:
+    - Is there any concept of an Owner or of signing in at all, or is every Photo visible to anyone who can reach the application?
+    - What must be operable without a mouse, and against which accessibility standard, if any, will the interface be judged?
+
+- id: REQ-PHOTO-004
+  title: The upload control opens a modal over the home page without navigating away
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "a button on the home page that
+    opens a popup/modal".
+  rationale: >-
+    The client asked for a popup specifically rather than a separate upload
+    page, so the grid staying on screen behind the upload is part of what they
+    described, not a presentation detail.
+  acceptance:
+    - given: The home page is displayed and no modal is open
+      when: The "+ Upload Photo" control is activated
+      then: A modal is displayed in front of the home page, and the grid remains present behind it
+    - given: The home page is displayed
+      when: The "+ Upload Photo" control is activated
+      then: The browser address does not change and the home page is not reloaded
+  ambiguities:
+    - May an Upload in progress be cancelled, and what must happen if the modal is closed before the Upload completes?
+    - Which devices, browsers and viewport widths must the interface support?
+    - What must be operable without a mouse, and against which accessibility standard, if any, will the interface be judged?
+  depends_on:
+    - REQ-PHOTO-003
+
+- id: REQ-PHOTO-005
+  title: The upload modal lets a person choose an image file from their own computer
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "where users can choose an image
+    from their computer and upload it".
+  acceptance:
+    - given: The upload modal is open and no file has been chosen
+      when: A file is chosen from the local file system
+      then: The name of the chosen file is displayed in the modal
+    - given: The upload modal is open and no file has been chosen
+      when: The modal's submit control is activated
+      then: No Upload is started and the number of Photos held by the system is unchanged
+  ambiguities:
+    - Does "photo" cover still images only, and which file formats must be accepted?
+    - What is the largest file a person may upload, and what must they see when they exceed it?
+    - What must happen when a person chooses a file that is not an accepted image, and must that be detected before the file is transferred?
+    - May more than one Photo be uploaded in a single use of the modal?
+  depends_on:
+    - REQ-PHOTO-004
+
+- id: REQ-PHOTO-006
+  title: A submitted image file becomes a new Photo held by the system
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "choose an image from their
+    computer and upload it" and "the new photo should be added to the gallery".
+  acceptance:
+    - given: An acceptable image file has been chosen in the upload modal
+      when: The modal's submit control is activated and the Upload completes
+      then: The number of Photos held by the system has increased by exactly one
+    - given: An Upload has completed successfully
+      when: The home page is requested afresh
+      then: The newly created Photo is among the tiles presented
+  ambiguities:
+    - Is there any concept of an Owner or of signing in at all, or is every Photo visible to anyone who can reach the application?
+    - Does "photo" cover still images only, and which file formats must be accepted?
+    - What is the largest file a person may upload, and what must they see when they exceed it?
+    - What must happen when a person chooses a file that is not an accepted image, and must that be detected before the file is transferred?
+    - May more than one Photo be uploaded in a single use of the modal?
+    - May an Upload in progress be cancelled, and what must happen if the modal is closed before the Upload completes?
+    - What must the person see when an Upload fails part-way, and must a failed Upload leave nothing behind?
+    - Are two Uploads of the same image file two Photos or one?
+    - Must the Original be retained unchanged after Upload, and must anyone be able to retrieve it?
+    - What information about a Photo, if any, must be shown beside it in the grid or in the larger view?
+    - Is there a limit on total storage, and what must happen when it is reached?
+  depends_on:
+    - REQ-PHOTO-005
+
+- id: REQ-PHOTO-007
+  title: An Upload that fails is reported to the person and creates no Photo
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "choose an image from their
+    computer and upload it". The brief does not describe failure at all; this
+    requirement records that the failure path exists and is entirely
+    unspecified, and every detail of it is listed below as an open question.
+  rationale: >-
+    An Upload that fails silently is indistinguishable from one that succeeded,
+    and the person's own copy of the file is the only remaining record. What the
+    person is told, and whether anything is left behind, is not a presentation
+    detail — it decides whether they upload again or believe the Photo is safe.
+  acceptance:
+    - given: An Upload has been submitted and the system cannot complete it
+      when: The attempt ends
+      then: A failure message is displayed in the modal and the modal does not close by itself
+    - given: An Upload has been submitted and the system cannot complete it
+      when: The attempt ends
+      then: The number of Photos held by the system is unchanged from before the attempt
+  ambiguities:
+    - What is the largest file a person may upload, and what must they see when they exceed it?
+    - What must happen when a person chooses a file that is not an accepted image, and must that be detected before the file is transferred?
+    - May an Upload in progress be cancelled, and what must happen if the modal is closed before the Upload completes?
+    - What must the person see when an Upload fails part-way, and must a failed Upload leave nothing behind?
+  depends_on:
+    - REQ-PHOTO-006
+
+- id: REQ-PHOTO-008
+  title: A newly uploaded Photo appears in the grid without the page being reloaded
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "After uploading, the new photo
+    should be added to the gallery and immediately displayed in the grid".
+  acceptance:
+    - given: The home page is open showing N Photo tiles
+      when: An Upload completes successfully in the modal
+      then: The grid presents N+1 tiles, one of which is the new Photo, without the person reloading the page
+  ambiguities:
+    - Is the application only ever used by one person on one PC, or must it serve several people at the same time?
+    - In what order must Photos appear in the grid, and when the client says "date" do they mean Capture date or Upload date?
+    - Does "immediately displayed" apply only to the person who uploaded the Photo, or must an already-open grid belonging to someone else update too?
+    - Must uploaded Photos still be in the Gallery after the application is stopped and started again?
+  depends_on:
+    - REQ-PHOTO-001
+    - REQ-PHOTO-006
+
+- id: REQ-PHOTO-009
+  title: Activating a Photo in the grid opens that Photo in a larger view
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "Clicking any photo should open
+    it in a larger view so the user can see it properly".
+  acceptance:
+    - given: The home page is displayed with at least two Photos
+      when: One Photo's tile is activated
+      then: That same Photo is presented in a larger view, and the Photo shown is the one whose tile was activated
+    - given: A Photo's tile is displayed at the grid's tile dimensions
+      when: That tile is activated
+      then: The Photo is rendered in the larger view at greater width and height than the tile
+  ambiguities:
+    - Is there any concept of an Owner or of signing in at all, or is every Photo visible to anyone who can reach the application?
+    - Must the Original be retained unchanged after Upload, and must anyone be able to retrieve it?
+    - What information about a Photo, if any, must be shown beside it in the grid or in the larger view?
+    - What does "a larger view" mean — an overlay on the home page or a separate page — and at what resolution is the Photo shown?
+    - Must the larger view offer navigation to the next and previous Photo, and how must it be dismissed?
+    - Which devices, browsers and viewport widths must the interface support?
+    - What must be operable without a mouse, and against which accessibility standard, if any, will the interface be judged?
+  depends_on:
+    - REQ-PHOTO-001
+
+- id: REQ-PHOTO-010
+  title: The larger view can be dismissed and returns the person to the grid
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "Clicking any photo should open
+    it in a larger view". The brief does not say how the larger view is left;
+    this requirement records that a way out must exist, and how it is offered is
+    an open question below.
+  acceptance:
+    - given: A Photo is open in the larger view
+      when: The person dismisses the larger view
+      then: The larger view is no longer displayed and the grid of Photo tiles is displayed again
+  ambiguities:
+    - What does "a larger view" mean — an overlay on the home page or a separate page — and at what resolution is the Photo shown?
+    - Must the larger view offer navigation to the next and previous Photo, and how must it be dismissed?
+    - What must be operable without a mouse, and against which accessibility standard, if any, will the interface be judged?
+  depends_on:
+    - REQ-PHOTO-009
+
+- id: REQ-PHOTO-011
+  title: The home page fits the viewport without horizontal scrolling
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "The application should be
+    simple, responsive, easy to run on a local development PC".
+  acceptance:
+    - given: A viewport at the narrowest width the client requires the application to support
+      when: The home page is displayed with at least one Photo
+      then: The document's scrollable width does not exceed the viewport width
+    - given: A viewport at the narrowest width the client requires the application to support
+      when: The home page is displayed
+      then: The "+ Upload Photo" control is visible within the viewport and can be activated without horizontal scrolling
+  ambiguities:
+    - Which devices, browsers and viewport widths must the interface support?
+    - What must be operable without a mouse, and against which accessibility standard, if any, will the interface be judged?
+    - Who decides whether the interface is "clean", "attractive" and "user-friendly", and what evidence would make it acceptable or unacceptable?
+  depends_on:
+    - REQ-PHOTO-001
+
+- id: REQ-PHOTO-012
+  title: An uploaded Photo remains in the Gallery in a later browser session
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "use a simple data store".
+  rationale: >-
+    "Data store" is the client's own word for the thing that keeps Photos. A
+    Photo that exists only in the page that uploaded it would satisfy every
+    other sentence in the brief and still lose the client's photographs.
+  acceptance:
+    - given: A Photo was uploaded during an earlier browser session
+      when: The home page is opened in a new browser session with no retained client-side state
+      then: That Photo is present among the tiles in the grid
+  ambiguities:
+    - Is there any concept of an Owner or of signing in at all, or is every Photo visible to anyone who can reach the application?
+    - Must the Original be retained unchanged after Upload, and must anyone be able to retrieve it?
+    - Must an existing Photo ever be removed or renamed by anyone, and if it is removed, is it recoverable?
+    - Must uploaded Photos still be in the Gallery after the application is stopped and started again?
+    - Is there a limit on total storage, and what must happen when it is reached?
+  depends_on:
+    - REQ-PHOTO-006
+
+- id: REQ-PHOTO-013
+  title: The application runs on the Node.js runtime
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "Create a simple and modern Photo
+    Gallery application using Node.js".
+  acceptance:
+    - given: A machine on which Node.js is the only installed language runtime
+      when: The application is started by its documented start procedure
+      then: The application starts and serves the home page, requiring no other language runtime to be installed
+  ambiguities:
+    - Which Node.js versions and which operating systems must the application run on?
+
+- id: REQ-PHOTO-014
+  title: The application starts and serves the home page on a single local development PC
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "easy to run on a local
+    development PC".
+  acceptance:
+    - given: A local development PC with the prerequisites the client has agreed to
+      when: The documented start procedure is followed from a clean checkout
+      then: The home page is reachable from a browser on that same PC and returns a successful response
+  ambiguities:
+    - Is the application only ever used by one person on one PC, or must it serve several people at the same time?
+    - Which Node.js versions and which operating systems must the application run on?
+    - What does "easy to run on a local development PC" mean in checkable terms — how many steps, and what may a person be expected to install first?
+
+- id: REQ-PHOTO-015
+  title: The application's third-party dependencies are limited to an approved list
+  module: PHOTO
+  priority: should
+  status: draft
+  version: 1
+  source: >-
+    Client email, KCB, Sep-01-2026 (BRIEF.md): "avoid unnecessary dependencies".
+  rationale: >-
+    The client raised dependencies unprompted, which suggests they expect to be
+    able to read and maintain the result themselves. Nothing in the brief says
+    what makes a dependency necessary, so this can only be checked against a
+    list they have seen.
+  acceptance:
+    - given: The delivered application
+      when: Its declared third-party runtime dependencies are listed
+      then: Every entry in that list appears on the dependency list the client has approved
+  ambiguities:
+    - What counts as an "unnecessary" dependency, and who approves the dependency list?
