@@ -628,9 +628,7 @@
   title: Text throughout the Gallery is sized from one defined type scale
   module: PHOTO
   priority: must
-  status: verified
-  verified_by:
-    - tests/type-scale.test.js
+  status: in_progress
   version: 1
   source: >-
     Client feedback, KCB, Sep-01-2026 (BRIEF.md, second brief): "a proper type and spacing scale",
@@ -669,9 +667,7 @@
   title: Space between elements in the Gallery is taken from one defined spacing scale
   module: PHOTO
   priority: must
-  status: verified
-  verified_by:
-    - tests/spacing-scale.test.js
+  status: in_progress
   version: 1
   source: >-
     Client feedback, KCB, Sep-01-2026 (BRIEF.md, second brief): "a proper type and spacing scale",
@@ -713,9 +709,7 @@
   title: The Gallery presents an app bar carrying the product name
   module: PHOTO
   priority: must
-  status: verified
-  verified_by:
-    - tests/app-bar.test.js
+  status: in_progress
   version: 1
   source: >-
     Client feedback, KCB, Sep-01-2026 (BRIEF.md, second brief): "an app bar with the product name";
