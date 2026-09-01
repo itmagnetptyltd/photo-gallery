@@ -48,3 +48,21 @@
   branch: feat/photo-responsive
   why: No horizontal scrolling, uniform tile spacing, every control keyboard-reachable, and the third-party dependency list justified. Both are end-of-build sweeps over work the earlier slices produced.
   covers: [REQ-PHOTO-011, REQ-PHOTO-015]
+
+- id: 8
+  name: Design foundations
+  branch: feat/photo-design-foundations
+  why: "The page gains a named app bar, and every text size and gap comes from one defined scale"
+  covers: [REQ-PHOTO-017, REQ-PHOTO-018, REQ-PHOTO-019]
+
+- id: 9
+  name: Controls and tiles
+  branch: feat/photo-design-controls
+  why: "Every button and tile is styled and responds to hover, and the Larger view controls match the rest"
+  covers: [REQ-PHOTO-020, REQ-PHOTO-021, REQ-PHOTO-022, REQ-PHOTO-023, REQ-PHOTO-024]
+
+- id: 10
+  name: Design review
+  branch: feat/photo-design-review
+  why: "The client sees the styled application and records a verdict"
+  covers: [REQ-PHOTO-016]
