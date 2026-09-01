@@ -78,7 +78,9 @@ export const renderHomePage = ({ photos, total, offset, pageSize }) => `<!doctyp
     <link rel="stylesheet" href="/gallery.css" />
   </head>
   <body>
-    <h1>Photo Gallery</h1>
+    <header class="app-bar">
+      <h1>Photo Gallery</h1>
+    </header>
     <main>${photos.length === 0 ? emptyState() : grid(photos, { total, offset, pageSize })}
     </main>${uploadModal()}${largerView()}
     <script type="module" src="/upload-modal.js"></script>

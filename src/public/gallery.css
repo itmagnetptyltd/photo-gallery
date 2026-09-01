@@ -1,21 +1,72 @@
+/*
+ * The design token sheet, approved by KCB on Sep-01-2026 and recorded as
+ * ADR-0001. Every text size and space below is drawn from here. A bespoke
+ * value is a review failure rather than a style opinion: REQ-PHOTO-017@v1 and
+ * REQ-PHOTO-018@v1 say no size or space may come from outside these scales,
+ * and tests/type-scale.test.js and tests/spacing-scale.test.js assert it.
+ *
+ * The palette is declared in full but only partly applied in this slice. The
+ * remaining colours are consumed by REQ-PHOTO-020..024, so that KCB approved
+ * the sheet once rather than twice.
+ */
 :root {
+  --font-stack: system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --text-app-bar-title: 1.25rem;
+  --text-heading: 1.125rem;
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-caption: 0.75rem;
+
+  /* Base unit 0.25rem. --space-4 is the Grid gap and keeps the 1rem it
+   * shipped with: answer 49 fixes it, so the scale was built around it. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  --color-page: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-text: #1f2933;
+  --color-border: #b0bec5;
+  --color-accent: #1565c0;
+
+  /* A grid track minimum, not a space between elements. */
   --tile-min: 12rem;
-  --gap: 1rem;
 }
 
 body {
   margin: 0;
-  padding: var(--gap);
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  padding: 0;
+  background: var(--color-page);
+  font-family: var(--font-stack);
 }
 
-h1 {
-  font-size: 1.25rem;
+/*
+ * The app bar spans the window, so the page's own inset lives on <main>. It is
+ * in normal flow and carries no z-index: it scrolls away with the content
+ * (answer 34) and the Larger view's dialog covers it from the top layer
+ * (answer 36).
+ */
+.app-bar {
+  background: var(--color-surface);
+  padding: var(--space-3) var(--space-4);
+}
+
+.app-bar h1 {
+  margin: 0;
+  font-size: var(--text-app-bar-title);
   font-weight: 600;
 }
 
+main {
+  padding: var(--space-4);
+}
+
 .upload-control {
-  padding: 0.5rem 0.9rem;
+  padding: var(--space-2) var(--space-3);
   font: inherit;
   cursor: pointer;
 }
@@ -24,8 +75,8 @@ h1 {
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--tile-min), 1fr));
-  gap: var(--gap);
-  margin: var(--gap) 0 0;
+  gap: var(--space-4);
+  margin: var(--space-4) 0 0;
   padding: 0;
   list-style: none;
 }
@@ -44,19 +95,19 @@ h1 {
 }
 
 .empty-state {
-  margin: var(--gap) 0;
+  margin: var(--space-4) 0;
   color: #546e7a;
 }
 
 .more {
   display: inline-block;
-  margin-top: var(--gap);
+  margin-top: var(--space-4);
 }
 
 .upload-modal {
   border: 1px solid #b0bec5;
   border-radius: 6px;
-  padding: var(--gap);
+  padding: var(--space-4);
   min-width: 18rem;
 }
 
@@ -66,7 +117,7 @@ h1 {
 
 .upload-modal h2 {
   margin-top: 0;
-  font-size: 1rem;
+  font-size: var(--text-heading);
 }
 
 .chosen-file {
@@ -91,7 +142,7 @@ h1 {
 
 .lightbox {
   border: 0;
-  padding: var(--gap);
+  padding: var(--space-4);
   background: #263238;
   max-width: none;
   max-height: none;
@@ -110,9 +161,9 @@ h1 {
 }
 
 .lightbox button {
-  margin-top: var(--gap);
+  margin-top: var(--space-4);
   font: inherit;
-  padding: 0.4rem 0.8rem;
+  padding: var(--space-2) var(--space-3);
 }
 
 /*

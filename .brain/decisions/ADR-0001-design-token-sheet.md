@@ -49,13 +49,16 @@ is drawn. No component declares a bespoke value.
 
 **Type scale** — five named steps, per answer 48.
 
-| Token | Value | Used for |
-|---|---|---|
-| `--text-app-bar-title` | 1.25rem | the app bar's product name |
-| `--text-heading` | 1.125rem | section and dialog headings |
-| `--text-body` | 1rem | body text, controls |
-| `--text-small` | 0.875rem | secondary text |
-| `--text-caption` | 0.75rem | the smallest supporting text |
+| Token | Step | Value | Used for |
+|---|---|---|---|
+| `--text-app-bar-title` | app bar title | 1.25rem | the app bar's product name |
+| `--text-heading` | section heading | 1.125rem | section and dialog headings |
+| `--text-body` | body | 1rem | body text, controls |
+| `--text-small` | small | 0.875rem | secondary text |
+| `--text-caption` | caption | 0.75rem | the smallest supporting text |
+
+The **Step** column carries the names answer 48 gave them, so the sheet lists the
+steps in the client's own words and not only as token identifiers.
 
 **Spacing scale** — one base unit of `0.25rem` and a fixed set of multiples, per
 answers 48 and 49.
