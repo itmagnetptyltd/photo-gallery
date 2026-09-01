@@ -126,6 +126,12 @@ export const openStore = ({ directory }) => {
     return row
   }
 
+  /** The Photo's record, or null. Used to serve an Original with its own type. */
+  const findPhoto = (id) => {
+    const row = db.get('SELECT * FROM photos WHERE id = ?', [id])
+    return row ? toPhoto(row) : null
+  }
+
   const readOriginal = async (id) => {
     requireRow(id)
     return readFile(pathsFor(id).original)
@@ -154,6 +160,7 @@ export const openStore = ({ directory }) => {
     savePhoto,
     listPhotos,
     countPhotos,
+    findPhoto,
     readOriginal,
     readThumbnail,
     removePhoto,

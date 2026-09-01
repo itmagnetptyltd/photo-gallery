@@ -14,6 +14,7 @@ const STYLESHEET = join(HERE, 'public', 'gallery.css')
 const SCRIPTS = {
   '/upload-modal.js': join(HERE, 'public', 'upload-modal.js'),
   '/upload-rules.js': join(HERE, 'upload-rules.js'),
+  '/lightbox.js': join(HERE, 'public', 'lightbox.js'),
 }
 
 /**
@@ -106,7 +107,7 @@ const receiveUpload = async (request, response) => {
   response.end(renderTile(photo))
 }
 
-/** Serves a Photo's Rendition. The Original is REQ-PHOTO-009's business. */
+/** Serves a Photo's Rendition — what the Grid's tiles show. */
 const sendThumbnail = async (id, response) => {
   let bytes
   try {
@@ -116,6 +117,27 @@ const sendThumbnail = async (id, response) => {
   }
 
   response.writeHead(200, { 'content-type': 'image/png' })
+  response.end(bytes)
+}
+
+/**
+ * Serves a Photo's Original — what the larger view shows (REQ-PHOTO-009).
+ *
+ * The id is looked up before any path is built, so an id that is not a stored
+ * Photo never reaches the filesystem.
+ */
+const sendOriginal = async (id, response) => {
+  const photo = getStore().findPhoto(id)
+  if (!photo) return refuse(response, 404, 'No such photo.')
+
+  let bytes
+  try {
+    bytes = await getStore().readOriginal(id)
+  } catch {
+    return refuse(response, 404, 'No such photo.')
+  }
+
+  response.writeHead(200, { 'content-type': photo.type })
   response.end(bytes)
 }
 
@@ -147,6 +169,12 @@ export const createServer = () =>
     const thumbnail = /^\/photos\/([^/]+)\/thumbnail$/.exec(url.pathname)
     if (thumbnail) {
       await sendThumbnail(decodeURIComponent(thumbnail[1]), response)
+      return
+    }
+
+    const original = /^\/photos\/([^/]+)\/original$/.exec(url.pathname)
+    if (original) {
+      await sendOriginal(decodeURIComponent(original[1]), response)
       return
     }
 

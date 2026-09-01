@@ -78,3 +78,49 @@ h1 {
   color: #b71c1c;
   min-height: 1.2em;
 }
+
+.tile-open {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.lightbox {
+  border: 0;
+  padding: var(--gap);
+  background: #263238;
+  max-width: none;
+  max-height: none;
+}
+
+.lightbox::backdrop {
+  background: rgb(0 0 0 / 0.75);
+}
+
+/* Sized against the viewport, so the Original is always larger than a tile. */
+.lightbox-image {
+  display: block;
+  max-width: 90vw;
+  max-height: 80vh;
+  margin: 0 auto;
+}
+
+.lightbox button {
+  margin-top: var(--gap);
+  font: inherit;
+  padding: 0.4rem 0.8rem;
+}
+
+/*
+ * A tile is an image with no text, and .tile-open strips its border and
+ * background, so without this a keyboard user cannot tell where focus is
+ * (REQ-PHOTO-011).
+ */
+:focus-visible {
+  outline: 3px solid #1565c0;
+  outline-offset: 2px;
+}

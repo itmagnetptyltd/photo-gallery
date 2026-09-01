@@ -288,7 +288,9 @@
   title: Activating a Photo in the grid opens that Photo in a larger view
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/lightbox.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "Clicking any photo should open
@@ -323,7 +325,9 @@
   title: The larger view can be dismissed and returns the person to the grid
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/lightbox.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "Clicking any photo should open
@@ -347,7 +351,9 @@
   title: The home page fits the viewport without horizontal scrolling
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/responsive.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "The application should be
@@ -454,7 +460,9 @@
   title: The application's third-party dependencies are limited to an approved list
   module: PHOTO
   priority: should
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/dependencies.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "avoid unnecessary dependencies";

@@ -17,9 +17,16 @@ const escapeHtml = (value) =>
 const uploadControl = () =>
   '<button type="button" class="upload-control">+ Upload Photo</button>'
 
+/**
+ * A tile. The image is wrapped in a button so a focused tile opens on Enter
+ * and Space without re-implementing either (REQ-PHOTO-009). The tile carries
+ * no text, so REQ-PHOTO-002's "image alone" still holds.
+ */
 export const renderTile = (photo) => `
         <li class="tile" data-photo-id="${escapeHtml(photo.id)}">
-          <img src="${escapeHtml(photo.thumbnailUrl)}" alt="" />
+          <button type="button" class="tile-open">
+            <img src="${escapeHtml(photo.thumbnailUrl)}" alt="" />
+          </button>
         </li>`
 
 const emptyState = () => `
@@ -49,6 +56,18 @@ const uploadModal = () => `
       <button type="button" class="upload-close">Cancel</button>
     </dialog>`
 
+/**
+ * The larger view. Empty until a tile is activated — the script fills the
+ * image from the Photo's Original.
+ */
+const largerView = () => `
+    <dialog class="lightbox">
+      <img class="lightbox-image" alt="" />
+      <button type="button" class="lightbox-previous">Previous</button>
+      <button type="button" class="lightbox-next">Next</button>
+      <button type="button" class="lightbox-close">Close</button>
+    </dialog>`
+
 /** The complete home page document. */
 export const renderHomePage = ({ photos, total, offset, pageSize }) => `<!doctype html>
 <html lang="en">
@@ -61,8 +80,9 @@ export const renderHomePage = ({ photos, total, offset, pageSize }) => `<!doctyp
   <body>
     <h1>Photo Gallery</h1>
     <main>${photos.length === 0 ? emptyState() : grid(photos, { total, offset, pageSize })}
-    </main>${uploadModal()}
+    </main>${uploadModal()}${largerView()}
     <script type="module" src="/upload-modal.js"></script>
+    <script type="module" src="/lightbox.js"></script>
   </body>
 </html>
 `
