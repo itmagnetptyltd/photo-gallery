@@ -478,3 +478,314 @@
     - given: The delivered application
       when: Its declared third-party runtime dependencies are listed
       then: Each entry serves the web server, SQLite access or image thumbnail generation, and no entry serves any other purpose
+
+# ---------------------------------------------------------------------------
+# Second brief — Sep-01-2026 (BRIEF.md, "Second brief"), raised as FB-0001 and
+# scoped by CHG-0001.
+#
+# REQ-PHOTO-016 onward decompose the visual-design feedback. Every one is
+# `draft` at `version: 1` and every one carries open ambiguities, because the
+# brief names no palette, no typeface, no sizes, no radius, no reference site
+# and no mockup. None of those may be chosen by the delivery team: choosing is
+# exactly what produced FB-0001. The matching questions are numbered 29 onward
+# in AMBIGUITIES.md.
+#
+# Two asks in that brief are NOT decomposed here, because existing verified
+# requirements already cover them and a duplicate would fork the record:
+#   - "a visible focus ring on every interactive element" — an outline already
+#     ships and is asserted by tests/responsive.test.js under REQ-PHOTO-011@v1.
+#     See question 43.
+#   - "a designed empty state" — the empty state already exists with its
+#     invitation and the "+ Upload Photo" control under REQ-PHOTO-001@v1
+#     criterion 7. See question 44.
+# Both questions are attached to REQ-PHOTO-016. If the client wants either
+# strengthened into an agreed criterion, that is a version bump of the existing
+# requirement through /change-record, not a new requirement written here.
+# ---------------------------------------------------------------------------
+
+- id: REQ-PHOTO-016
+  title: The Gallery's visual design is judged professional at a recorded client review
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client feedback, KCB, Sep-01-2026 (BRIEF.md, second brief): "The gallery works but looks
+    amateur. It needs to look professional". Raised as FB-0001 and scoped by CHG-0001.
+  rationale: >-
+    FB-0001 records how this gap was made. In the first brief "attractive" was decomposed into
+    structural criteria and the adjective was carried into none of them, so nothing in the record
+    ever required the result to look good and the build stopped at the criteria that existed. Unless
+    the judgement itself is written down as something a named person must record a verdict on, the
+    same gap reopens at the next review.
+  acceptance:
+    - given: >-
+        The Gallery running on a local development PC and rendered in a browser, showing the home
+        page with Photos, the home page with no Photo, the upload modal and the Larger view
+      when: The client reviews those four views
+      then: >-
+        A verdict is recorded against REQ-PHOTO-016 that is either acceptance or a written list of
+        specific changes, and this requirement does not pass without that record
+    - given: No browser has rendered this application in any check to date, as FB-0001 states
+      when: This requirement is assessed
+      then: >-
+        The assessment is made against the running application rendered in a browser, not against
+        its stylesheet or markup alone
+    - given: A recorded review has produced a written list of specific changes
+      when: That list is compared with this requirement file
+      then: >-
+        Each change is traceable to an existing requirement id or raises a new one, and none is
+        closed by the delivery team deciding it is unnecessary
+  ambiguities:
+    - Who judges "professional", and against what?
+    - Who supplies the design values — you or us?
+    - Is there a palette, and is it light or dark?
+    - Is the upload modal part of this restyle?
+    - The focus ring already ships — what more do you want?
+    - The empty state already exists — what does "designed" add?
+    - Does "professional" extend to small screens?
+    - Does this include how tiles crop photos, and blurry small photos?
+    - How is any of this to be checked, given nothing has ever been rendered?
+  depends_on:
+    - REQ-PHOTO-017
+    - REQ-PHOTO-018
+    - REQ-PHOTO-019
+    - REQ-PHOTO-020
+    - REQ-PHOTO-021
+    - REQ-PHOTO-022
+    - REQ-PHOTO-023
+    - REQ-PHOTO-024
+- id: REQ-PHOTO-017
+  title: Text throughout the Gallery is sized from one defined type scale
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client feedback, KCB, Sep-01-2026 (BRIEF.md, second brief): "a proper type and spacing scale",
+    the type half.
+  acceptance:
+    - given: A type scale has been defined for the Gallery
+      when: The text of the home page, the upload modal and the Larger view is inspected
+      then: >-
+        Every text element is sized at one of the steps of that scale, and no text is sized by a
+        value outside it
+    - given: A type scale has been defined for the Gallery
+      when: The same kind of text element appears on more than one view
+      then: It is sized at the same step of the scale on each of those views
+    - given: The delivered Gallery
+      when: Its type scale is looked for
+      then: >-
+        The steps of the scale are recorded in one place a person can read, rather than being
+        inferable only from the rendered result
+  ambiguities:
+    - Who supplies the design values — you or us?
+    - Which typeface, and may it be fetched over the network?
+    - Does "scale" mean a written-down set of steps, or just consistency?
+  depends_on:
+    - REQ-PHOTO-001
+- id: REQ-PHOTO-018
+  title: Space between elements in the Gallery is taken from one defined spacing scale
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client feedback, KCB, Sep-01-2026 (BRIEF.md, second brief): "a proper type and spacing scale",
+    the spacing half.
+  acceptance:
+    - given: A spacing scale has been defined for the Gallery
+      when: >-
+        The space between and around the elements of the home page, the upload modal and the Larger
+        view is inspected
+      then: >-
+        Every such space is one of the steps of that scale, and no space is set by a value outside
+        it
+    - given: The delivered Gallery
+      when: Its spacing scale is looked for
+      then: >-
+        The steps of the scale are recorded in one place a person can read, rather than being
+        inferable only from the rendered result
+    - given: The Grid is displayed with at least four Photos
+      when: The space between adjacent tiles is compared across the Grid
+      then: >-
+        The space is the same between every pair of adjacent tiles, as REQ-PHOTO-011@v1 criterion 3
+        already requires
+  ambiguities:
+    - Who supplies the design values — you or us?
+    - Does "scale" mean a written-down set of steps, or just consistency?
+    - May the spacing scale change the gap between tiles?
+  depends_on:
+    - REQ-PHOTO-001
+    - REQ-PHOTO-011
+- id: REQ-PHOTO-019
+  title: The Gallery presents an app bar carrying the product name
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: 'Client feedback, KCB, Sep-01-2026 (BRIEF.md, second brief): "an app bar with the product name".'
+  acceptance:
+    - given: The home page is displayed
+      when: The page content is inspected
+      then: An app bar region is present and contains the product name as text
+    - given: The home page is displayed at a supported desktop viewport width
+      when: The app bar is inspected
+      then: >-
+        The app bar is visible within the viewport without horizontal scrolling, and it overlaps
+        neither the Grid nor the "+ Upload Photo" control
+    - given: The home page is displayed with no Photo held by the system
+      when: The page content is inspected
+      then: The app bar is present and carries the same product name as when Photos are held
+  ambiguities:
+    - Who supplies the design values — you or us?
+    - Is there a palette, and is it light or dark?
+    - What is "the product name"?
+    - Where does the app bar sit, and what does it do when the page scrolls?
+    - Does the "+ Upload Photo" control move into the app bar?
+    - Is the app bar in front of the Larger view, or behind it?
+    - Does "professional" extend to small screens?
+  depends_on:
+    - REQ-PHOTO-001
+    - REQ-PHOTO-011
+- id: REQ-PHOTO-020
+  title: Every button in the Gallery is presented with one defined visual treatment
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client feedback, KCB, Sep-01-2026 (BRIEF.md, second brief): "styled buttons", the styled half of
+    "styled buttons with hover and focus states".
+  acceptance:
+    - given: A button treatment has been defined for the Gallery
+      when: >-
+        The "+ Upload Photo" control, the upload modal's controls and the Larger view's controls are
+        inspected
+      then: >-
+        Each is presented with that defined treatment, and no button is presented with a treatment
+        outside the defined set
+    - given: The delivered Gallery
+      when: Any button is inspected
+      then: >-
+        It is presented with the defined treatment rather than the browser's default control
+        appearance
+    - given: Two buttons of the same defined variant appear on different views
+      when: Their presentation is compared
+      then: Their visual treatment is identical
+  ambiguities:
+    - Who supplies the design values — you or us?
+    - Is there a palette, and is it light or dark?
+    - Which elements have rounded corners besides the tiles?
+    - Is the upload modal part of this restyle?
+    - One button treatment, or several?
+  depends_on:
+    - REQ-PHOTO-003
+    - REQ-PHOTO-017
+    - REQ-PHOTO-018
+- id: REQ-PHOTO-021
+  title: Every button presents a hover state distinct from its resting state
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client feedback, KCB, Sep-01-2026 (BRIEF.md, second brief): "styled buttons with hover and focus
+    states", the hover half. The focus half is not decomposed here — see question 43.
+  acceptance:
+    - given: A pointing device is in use and a button is displayed in its resting state
+      when: The pointer is moved over the button
+      then: At least one visual property of the button differs from its resting state
+    - given: A button is in its hover state
+      when: The pointer leaves the button
+      then: The button returns to the presentation it had before the pointer arrived
+    - given: A pointing device is in use and several buttons are displayed
+      when: The pointer is over exactly one of them
+      then: Only that button changes, and every other button stays in its resting state
+  ambiguities:
+    - Who supplies the design values — you or us?
+    - What changes on hover, and what do touch and keyboard users get instead?
+    - The focus ring already ships — what more do you want?
+  depends_on:
+    - REQ-PHOTO-020
+- id: REQ-PHOTO-022
+  title: Every Photo tile in the Grid is presented with rounded corners
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client feedback, KCB, Sep-01-2026 (BRIEF.md, second brief): "tiles with rounded corners and a
+    hover state", the rounded corners half.
+  acceptance:
+    - given: A corner radius has been defined for Photo tiles
+      when: The Grid is displayed with at least four Photos
+      then: Every tile is presented with that same non-zero radius on all four of its corners
+    - given: A Photo tile presented with rounded corners
+      when: Its thumbnail Rendition is displayed in the tile
+      then: The image is clipped to the rounded shape, and no square image corner is visible outside it
+  ambiguities:
+    - Who supplies the design values — you or us?
+    - Which elements have rounded corners besides the tiles?
+    - Does this include how tiles crop photos, and blurry small photos?
+  depends_on:
+    - REQ-PHOTO-002
+- id: REQ-PHOTO-023
+  title: A Photo tile presents a hover state distinct from its resting state
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client feedback, KCB, Sep-01-2026 (BRIEF.md, second brief): "tiles with rounded corners and a
+    hover state", the hover state half.
+  acceptance:
+    - given: A pointing device is in use and the Grid is displayed with at least four Photos
+      when: The pointer is moved over one tile
+      then: >-
+        At least one visual property of that tile differs from its resting state, and every other
+        tile stays in its resting state
+    - given: A tile is in its hover state
+      when: The pointer leaves the tile
+      then: The tile returns to the presentation it had before the pointer arrived
+  ambiguities:
+    - Who supplies the design values — you or us?
+    - What changes on hover, and what do touch and keyboard users get instead?
+    - May a tile's hover state show text?
+  depends_on:
+    - REQ-PHOTO-002
+    - REQ-PHOTO-009
+- id: REQ-PHOTO-024
+  title: The Larger view's controls are presented with the Gallery's defined treatment
+  module: PHOTO
+  priority: must
+  status: draft
+  version: 1
+  source: >-
+    Client feedback, KCB, Sep-01-2026 (BRIEF.md, second brief): "styled lightbox chrome". The
+    glossary defines no term lightbox; this requirement reads it as the Larger view, which question
+    40 puts to the client.
+  acceptance:
+    - given: A Photo is open in the Larger view
+      when: Its close, previous and next controls are inspected
+      then: >-
+        Each is presented with the Gallery's defined button treatment rather than the browser's
+        default control appearance
+    - given: A Photo is open in the Larger view
+      when: The stacking of the controls and the Original is inspected
+      then: Each control is rendered in front of the Original and none of them is covered by it
+    - given: A Photo is open in the Larger view
+      when: The close, previous and next controls are compared with each other
+      then: All three are presented with the same defined treatment as each other
+  ambiguities:
+    - Who supplies the design values — you or us?
+    - Is there a palette, and is it light or dark?
+    - Is the app bar in front of the Larger view, or behind it?
+    - Which elements have rounded corners besides the tiles?
+    - Is "lightbox" the Larger view, and what is its "chrome"?
+    - Must the Larger view's controls stay legible over any Photo?
+    - One button treatment, or several?
+  depends_on:
+    - REQ-PHOTO-009
+    - REQ-PHOTO-010
+    - REQ-PHOTO-020

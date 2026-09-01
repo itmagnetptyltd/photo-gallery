@@ -124,3 +124,102 @@ Use a current Node.js LTS release on Windows for the local development PC. Other
 
 Easy to run means Node.js must be installed first, then the project can be started with the documented install and run commands. No database server, cloud service, Docker, or other external infrastructure is required.
 
+
+---
+
+# Answers — second brief, Sep-01-2026
+
+Questions 29-50 arise from KCB's feedback on the first delivery. Paste their
+reply under the question it answers, in their words. Then run
+`/resolve-ambiguities`.
+
+The 28 answers above are the record of the first brief and stay where they are.
+
+## 29. Who judges "professional", and against what?
+
+_(awaiting client)_
+
+## 30. Who supplies the design values — you or us?
+
+_(awaiting client)_
+
+## 31. Is there a palette, and is it light or dark?
+
+_(awaiting client)_
+
+## 32. Which typeface, and may it be fetched over the network?
+
+_(awaiting client)_
+
+## 33. What is "the product name"?
+
+_(awaiting client)_
+
+## 34. Where does the app bar sit, and what does it do when the page scrolls?
+
+_(awaiting client)_
+
+## 35. Does the "+ Upload Photo" control move into the app bar?
+
+_(awaiting client)_
+
+## 36. Is the app bar in front of the Larger view, or behind it?
+
+_(awaiting client)_
+
+## 37. What changes on hover, and what do touch and keyboard users get instead?
+
+_(awaiting client)_
+
+## 38. May a tile's hover state show text?
+
+_(awaiting client)_
+
+## 39. Which elements have rounded corners besides the tiles?
+
+_(awaiting client)_
+
+## 40. Is "lightbox" the Larger view, and what is its "chrome"?
+
+_(awaiting client)_
+
+## 41. Must the Larger view's controls stay legible over any Photo?
+
+_(awaiting client)_
+
+## 42. Is the upload modal part of this restyle?
+
+_(awaiting client)_
+
+## 43. The focus ring already ships — what more do you want?
+
+_(awaiting client)_
+
+## 44. The empty state already exists — what does "designed" add?
+
+_(awaiting client)_
+
+## 45. Does "professional" extend to small screens?
+
+_(awaiting client)_
+
+## 46. Does this include how tiles crop photos, and blurry small photos?
+
+_(awaiting client)_
+
+## 47. How is any of this to be checked, given nothing has ever been rendered?
+
+_(awaiting client)_
+
+## 48. Does "scale" mean a written-down set of steps, or just consistency?
+
+_(awaiting client)_
+
+## 49. May the spacing scale change the gap between tiles?
+
+_(awaiting client)_
+
+## 50. One button treatment, or several?
+
+_(awaiting client)_
+

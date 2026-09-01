@@ -15,3 +15,22 @@ Received: Sep-01-2026, from KCB, via email
 
 Nothing else was said. This is the entire brief as received — there was no
 attachment, no wireframe, no follow-up call, and no prior document it refers to.
+
+---
+
+## Second brief — Sep-01-2026
+
+Received: Sep-01-2026, from KCB, via feedback on the first delivery
+
+> The gallery works but looks amateur. It needs to look professional: a
+> proper type and spacing scale, an app bar with the product name, styled
+> buttons with hover and focus states, tiles with rounded corners and a
+> hover state, a designed empty state, styled lightbox chrome, and a
+> visible focus ring on every interactive element.
+
+Nothing else was said. No mockup, no reference site, no palette, no typeface and
+no wireframe accompanied it.
+
+This brief is the scope behind CHG-0001, raised from FB-0001. It arrived after
+all 15 requirements of the first brief reached `verified`, so it is new scope
+against a delivered increment rather than a clarification of the original.

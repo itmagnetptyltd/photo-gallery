@@ -102,4 +102,27 @@ Any of these arriving later is a variation, not a gap: `/find-variation`.
 
 ## Appears in source documents, not yet defined
 
-- _(none — every term the brief used was settled on Sep-01-2026)_
+The first brief's terms were all settled on Sep-01-2026. The **second brief of
+Sep-01-2026** then introduced these, and none is defined by anything in the
+record. Each has a matching question in `requirements/AMBIGUITIES.md`.
+
+- **professional** / **amateur** — the judgement the whole brief rests on, with
+  no stated standard and no reference the client pointed at
+- **type scale** — no typeface, no sizes, no ratio given
+- **spacing scale** — the Grid already uses one `gap`; whether this means a
+  documented scale or different values is unstated
+- **app bar** — no content beyond "the product name", no position, no behaviour
+  on scroll
+- **the product name** — the page says "Photo Gallery"; whether that is the name
+  has never been confirmed
+- **styled** (buttons, lightbox chrome) — no palette, no shape, no weight
+- **hover state** — what changes on hover is not said, and hover does not exist
+  on touch input
+- **rounded corners** — no radius
+- **designed empty state** — the empty state already exists and carries an
+  invitation and the upload control; what "designed" adds is unstated
+- **lightbox chrome** — presumably the close, previous and next controls, but
+  "chrome" was never defined
+- **focus ring** — a `:focus-visible` outline already ships under
+  REQ-PHOTO-011@v1; whether this ask is already satisfied is a question for the
+  client, not for us to close
