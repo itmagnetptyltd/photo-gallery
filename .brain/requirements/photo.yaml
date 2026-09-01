@@ -188,7 +188,10 @@
   title: A submitted image file becomes a new Photo held by the system
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/store.test.js
+    - tests/upload-store.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "choose an image from their
@@ -221,7 +224,10 @@
   title: An Upload that fails is reported to the person and creates no Photo
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/store.test.js
+    - tests/upload-store.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "choose an image from their
@@ -363,7 +369,10 @@
   title: An uploaded Photo remains in the Gallery in a later browser session
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/store.test.js
+    - tests/upload-store.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "use a simple data store";

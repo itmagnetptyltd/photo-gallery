@@ -14,8 +14,8 @@ No database server, container runtime or cloud service is required.
 npm install
 ```
 
-There are no runtime dependencies, so this completes without downloading
-anything. It is still the documented install step.
+Two dependencies are installed — SQLite access and thumbnail generation, the
+purposes `REQ-PHOTO-015` permits. Neither needs a compiler.
 
 ## Run
 
@@ -34,6 +34,22 @@ PORT=4000 npm start
 The server binds to `127.0.0.1` only, so the gallery is reachable from the PC
 running it and not from other machines on the network. That is deliberate — see
 `REQ-PHOTO-014` in `.brain/requirements/photo.yaml`.
+
+## Where Photos are stored
+
+Uploaded Photos live in  beside the project: the Original and its
+thumbnail under  and , and their metadata in
+ (SQLite). Set  to put them elsewhere.
+
+Deleting  removes every Photo permanently. It is not committed.
+
+## Where Photos are stored
+
+Uploaded Photos live in `data/` beside the project — the Original and its
+thumbnail under `data/originals` and `data/thumbnails`, and their metadata in
+`data/photos.db` (SQLite). Set `PHOTO_DATA_DIR` to put them somewhere else.
+
+Deleting `data/` removes every Photo permanently. It is not committed.
 
 ## Test
 

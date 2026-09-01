@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
-import { listPhotos, countPhotos, PAGE_SIZE } from './photos.js'
+import { listPhotos, countPhotos, getStore, PAGE_SIZE } from './photos.js'
 import { renderHomePage } from './home-page.js'
 import { MAX_UPLOAD_BYTES, sniffImageType } from './upload-rules.js'
 
@@ -75,9 +75,9 @@ const refuse = (response, status, reason) => {
 }
 
 /**
- * Accepts an Upload and stores nothing. REQ-PHOTO-006 makes it a Photo, and
- * that is slice 4; this route exists because REQ-PHOTO-005 requires the server
- * to reject what the browser check could be bypassed to allow.
+ * Accepts an Upload and stores it. The server re-validates by content because
+ * REQ-PHOTO-005 requires rejection of what a bypassed browser check would let
+ * through, and REQ-PHOTO-006 makes what survives a Photo.
  */
 const receiveUpload = async (request, response) => {
   const { bytes, tooLarge } = await readBody(request)
@@ -88,8 +88,18 @@ const receiveUpload = async (request, response) => {
     return refuse(response, 415, 'That file is not a JPEG or PNG image.')
   }
 
-  response.writeHead(202, { 'content-type': 'text/plain; charset=utf-8' })
-  response.end('Accepted.')
+  try {
+    await getStore().savePhoto({
+      bytes,
+      filename: request.headers['x-filename'] ?? 'photo',
+      type: sniffImageType(bytes),
+    })
+  } catch {
+    return refuse(response, 500, 'That image could not be stored.')
+  }
+
+  response.writeHead(201, { 'content-type': 'text/plain; charset=utf-8' })
+  response.end('Created.')
 }
 
 /** Builds the application's HTTP server without binding it to a port. */

@@ -1,61 +1,73 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { readFileSync, mkdtempSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 import { createServer } from '../src/server.js'
-import { seedPhotos, PAGE_SIZE } from '../src/photos.js'
+import { openStore } from '../src/store.js'
+import { useStore, PAGE_SIZE } from '../src/photos.js'
+import { makePng } from './support/png.js'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 
-const startOnEphemeralPort = async () => {
+/**
+ * Seeds `count` Photos into a throwaway store, one at a time so their Upload
+ * order is the order they were saved, then fetches the home page.
+ *
+ * Slice 2 seeded plain objects through a `seedPhotos` seam. Slice 4 removed it
+ * when the store arrived, so these tests now exercise the real path.
+ */
+const homePageWith = async (count, { removeAt = null, query = '' } = {}) => {
+  const directory = mkdtempSync(join(tmpdir(), 'photo-grid-'))
+  const store = openStore({ directory })
+  useStore(store)
+
+  const saved = []
+  for (let i = 0; i < count; i += 1) {
+    saved.push(
+      await store.savePhoto({
+        bytes: makePng(16),
+        filename: `photo-${i}.png`,
+        type: 'image/png',
+      }),
+    )
+  }
+
+  let removed = null
+  if (removeAt !== null) {
+    removed = saved[removeAt]
+    await store.removePhoto(removed.id)
+  }
+
   const server = createServer()
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve))
-  const { port } = server.address()
-  return {
-    origin: `http://127.0.0.1:${port}`,
-    stop: () => new Promise((resolve) => server.close(resolve)),
-  }
-}
+  const origin = `http://127.0.0.1:${server.address().port}`
 
-/** Fetches the home page markup with the given Photos seeded. */
-const homePageWith = async (photos) => {
-  seedPhotos(photos)
-  const app = await startOnEphemeralPort()
   try {
-    const response = await fetch(app.origin + '/')
+    const response = await fetch(origin + '/' + query)
     assert.equal(response.status, 200)
-    return await response.text()
+    return { markup: await response.text(), saved, removed }
   } finally {
-    await app.stop()
+    await new Promise((resolve) => server.close(resolve))
+    await store.close()
+    rmSync(directory, { recursive: true, force: true })
   }
 }
 
 const tileIdsIn = (markup) =>
   [...markup.matchAll(/data-photo-id="([^"]+)"/g)].map((m) => m[1])
 
-const photo = (id, uploadedAt, capturedAt = null) => ({
-  id,
-  uploadedAt,
-  capturedAt,
-  imageUrl: `/photos/${id}/image`,
-})
-
 // @covers REQ-PHOTO-001@v1
 test('presents one tile for each stored Photo', async () => {
-  const markup = await homePageWith([
-    photo('a', '2026-08-01T10:00:00Z'),
-    photo('b', '2026-08-02T10:00:00Z'),
-    photo('c', '2026-08-03T10:00:00Z'),
-  ])
-
+  const { markup } = await homePageWith(3)
   assert.equal(tileIdsIn(markup).length, 3)
 })
 
 // @covers REQ-PHOTO-001@v1
 test('lays tiles out in rows and columns rather than one vertical list', async () => {
-  const markup = await homePageWith([photo('a', '2026-08-01T10:00:00Z')])
+  const { markup } = await homePageWith(1)
   assert.match(markup, /class="[^"]*\bgallery-grid\b[^"]*"/)
 
   const css = readFileSync(join(ROOT, 'src', 'public', 'gallery.css'), 'utf8')
@@ -71,10 +83,7 @@ test('lays tiles out in rows and columns rather than one vertical list', async (
 
 // @covers REQ-PHOTO-001@v1
 test('shows all Photos in one collection with no gallery selector', async () => {
-  const markup = await homePageWith([
-    photo('a', '2026-08-01T10:00:00Z'),
-    photo('b', '2026-08-02T10:00:00Z'),
-  ])
+  const { markup } = await homePageWith(2)
 
   assert.equal(
     [...markup.matchAll(/class="[^"]*\bgallery-grid\b[^"]*"/g)].length,
@@ -87,7 +96,7 @@ test('shows all Photos in one collection with no gallery selector', async () => 
 
 // @covers REQ-PHOTO-001@v1
 test('serves the home page without a sign-in prompt', async () => {
-  const markup = await homePageWith([photo('a', '2026-08-01T10:00:00Z')])
+  const { markup } = await homePageWith(1)
 
   assert.doesNotMatch(markup, /type="password"/i)
   assert.doesNotMatch(markup, /\bsign[ -]?in\b/i)
@@ -96,27 +105,19 @@ test('serves the home page without a sign-in prompt', async () => {
 
 // @covers REQ-PHOTO-001@v1
 test('orders tiles by Upload date and time, most recent first', async () => {
-  const markup = await homePageWith([
-    photo('middle', '2026-08-02T10:00:00Z', '2020-01-01T00:00:00Z'),
-    photo('oldest', '2026-08-01T10:00:00Z', '2030-01-01T00:00:00Z'),
-    photo('newest', '2026-08-03T10:00:00Z', '2010-01-01T00:00:00Z'),
-  ])
+  const { markup, saved } = await homePageWith(3)
 
-  assert.deepEqual(tileIdsIn(markup), ['newest', 'middle', 'oldest'])
+  const expected = [...saved].reverse().map((photo) => photo.id)
+  assert.deepEqual(tileIdsIn(markup), expected)
 })
 
 // @covers REQ-PHOTO-001@v1
 test('renders a bounded subset when more Photos are held than fit a screen', async () => {
-  const many = Array.from({ length: PAGE_SIZE * 3 }, (_, i) =>
-    photo(`p${i}`, new Date(Date.UTC(2026, 0, 1, 0, 0, i)).toISOString()),
-  )
-  const markup = await homePageWith(many)
+  const total = PAGE_SIZE + 5
+  const { markup } = await homePageWith(total)
 
   assert.equal(tileIdsIn(markup).length, PAGE_SIZE)
-  assert.ok(
-    many.length > PAGE_SIZE,
-    'this test is meaningless unless more Photos are held than one page',
-  )
+  assert.ok(total > PAGE_SIZE, 'this test is meaningless without more than one page')
   assert.match(
     markup,
     /href="\/\?offset=/,
@@ -126,7 +127,7 @@ test('renders a bounded subset when more Photos are held than fit a screen', asy
 
 // @covers REQ-PHOTO-001@v1
 test('shows an empty state with the upload control when no Photo is held', async () => {
-  const markup = await homePageWith([])
+  const { markup } = await homePageWith(0)
 
   assert.equal(tileIdsIn(markup).length, 0)
   assert.doesNotMatch(markup, /class="[^"]*\bgallery-grid\b[^"]*"/)
@@ -136,12 +137,8 @@ test('shows an empty state with the upload control when no Photo is held', async
 
 // @covers REQ-PHOTO-001@v1
 test('does not present a tile for a Photo that has been removed', async () => {
-  const remaining = [
-    photo('kept-a', '2026-08-01T10:00:00Z'),
-    photo('kept-b', '2026-08-02T10:00:00Z'),
-  ]
-  const markup = await homePageWith(remaining)
+  const { markup, removed } = await homePageWith(3, { removeAt: 1 })
 
   assert.equal(tileIdsIn(markup).length, 2)
-  assert.doesNotMatch(markup, /removed-one/)
+  assert.doesNotMatch(markup, new RegExp(removed.id))
 })

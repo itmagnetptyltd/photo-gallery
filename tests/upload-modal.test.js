@@ -1,8 +1,13 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
+import { mkdtempSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+
 import { createServer } from '../src/server.js'
-import { seedPhotos, countPhotos } from '../src/photos.js'
+import { openStore } from '../src/store.js'
+import { useStore, countPhotos } from '../src/photos.js'
 import { MAX_UPLOAD_BYTES } from '../src/upload-rules.js'
 
 const startOnEphemeralPort = async () => {
@@ -16,11 +21,17 @@ const startOnEphemeralPort = async () => {
 }
 
 const withApp = async (run) => {
+  const directory = mkdtempSync(join(tmpdir(), 'photo-modal-'))
+  const store = openStore({ directory })
+  useStore(store)
+
   const app = await startOnEphemeralPort()
   try {
     return await run(app)
   } finally {
     await app.stop()
+    await store.close()
+    rmSync(directory, { recursive: true, force: true })
   }
 }
 
@@ -44,7 +55,6 @@ const postUpload = (app, { body, filename = 'photo.jpg', type = 'image/jpeg' }) 
 
 // @covers REQ-PHOTO-005@v1
 test('server rejects a file bypassing the browser check, on content not name', async () => {
-  seedPhotos([])
   await withApp(async (app) => {
     const before = countPhotos()
     const response = await postUpload(app, {
@@ -63,7 +73,6 @@ test('server rejects a file bypassing the browser check, on content not name', a
 
 // @covers REQ-PHOTO-005@v1
 test('server rejects a body larger than 10 MB', async () => {
-  seedPhotos([])
   await withApp(async (app) => {
     const before = countPhotos()
     const oversized = Buffer.concat([
@@ -79,7 +88,6 @@ test('server rejects a body larger than 10 MB', async () => {
 
 // @covers REQ-PHOTO-005@v1
 test('submitting with no file starts no Upload', async () => {
-  seedPhotos([])
   await withApp(async (app) => {
     const before = countPhotos()
     const response = await postUpload(app, { body: Buffer.alloc(0) })
@@ -97,7 +105,6 @@ test('submitting with no file starts no Upload', async () => {
 
 // @covers REQ-PHOTO-003@v1
 test('home page carries exactly one "+ Upload Photo" control', async () => {
-  seedPhotos([])
   const markup = await homePage()
 
   const controls = [...markup.matchAll(/<button[^>]*>\s*\+ Upload Photo\s*<\/button>/g)]
@@ -106,7 +113,6 @@ test('home page carries exactly one "+ Upload Photo" control', async () => {
 
 // @covers REQ-PHOTO-003@v1
 test('the control is present with no credentials and no sign-in step', async () => {
-  seedPhotos([])
   await withApp(async (app) => {
     const response = await fetch(app.origin + '/')
     assert.equal(response.status, 200)
@@ -120,7 +126,6 @@ test('the control is present with no credentials and no sign-in step', async () 
 
 // @covers REQ-PHOTO-003@v1
 test('the control is a real button, keyboard reachable', async () => {
-  seedPhotos([])
   const markup = await homePage()
 
   const control = /<button[^>]*class="[^"]*upload-control[^"]*"[^>]*>/.exec(markup)
@@ -130,7 +135,6 @@ test('the control is a real button, keyboard reachable', async () => {
 
 // @covers REQ-PHOTO-004@v1
 test('the modal is a dialog opened over the page with the grid behind it', async () => {
-  seedPhotos([])
   const markup = await homePage()
 
   assert.match(markup, /<dialog[^>]*class="[^"]*upload-modal[^"]*"/)
@@ -144,7 +148,6 @@ test('the modal is a dialog opened over the page with the grid behind it', async
 
 // @covers REQ-PHOTO-004@v1
 test('opening the modal navigates nowhere and reloads nothing', async () => {
-  seedPhotos([])
   const markup = await homePage()
   const script = await clientScript()
 
@@ -174,7 +177,6 @@ test('the modal uses only what current Chrome, Edge and Firefox all support', as
 
 // @covers REQ-PHOTO-004@v1
 test('the file input and submit control are keyboard reachable', async () => {
-  seedPhotos([])
   const markup = await homePage()
 
   const fileInput = /<input[^>]*type="file"[^>]*>/.exec(markup)
@@ -188,7 +190,6 @@ test('the file input and submit control are keyboard reachable', async () => {
 
 // @covers REQ-PHOTO-005@v1
 test('the chosen file name is displayed in the modal', async () => {
-  seedPhotos([])
   const markup = await homePage()
   const script = await clientScript()
 
@@ -199,7 +200,6 @@ test('the chosen file name is displayed in the modal', async () => {
 
 // @covers REQ-PHOTO-005@v1
 test('the file chooser offers exactly one file', async () => {
-  seedPhotos([])
   const markup = await homePage()
 
   const fileInput = /<input[^>]*type="file"[^>]*>/.exec(markup)[0]
