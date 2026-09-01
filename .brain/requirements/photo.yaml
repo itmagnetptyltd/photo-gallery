@@ -17,7 +17,9 @@
   title: Home page shows every stored Photo in a grid
   module: PHOTO
   priority: must
-  status: in_progress
+  status: verified
+  verified_by:
+    - tests/grid.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "The home page should display all
