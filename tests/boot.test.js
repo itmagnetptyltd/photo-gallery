@@ -1,10 +1,13 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync, existsSync } from 'node:fs'
+import { readFileSync, existsSync, readdirSync, mkdtempSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 import { createServer } from '../src/server.js'
+import { openStore } from '../src/store.js'
+import { useStore } from '../src/photos.js'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -12,10 +15,52 @@ const readPackageJson = () =>
   JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'))
 
 /**
+ * REQ-PHOTO-013 requires Node to be the only language runtime needed, and
+ * REQ-PHOTO-014 that nothing else be prepared on the PC. Until slice 4 the
+ * project declared no dependencies at all, which made both trivially true.
+ * It now declares two, permitted by REQ-PHOTO-015 for SQLite access and
+ * thumbnail generation, so this asserts the thing that actually matters: no
+ * installed package may need a compiler or run an install script.
+ */
+const assertNoDependencyNeedsAToolchain = () => {
+  const modules = join(ROOT, 'node_modules')
+  const packages = readdirSync(modules).flatMap((name) => {
+    if (name.startsWith('.')) return []
+    if (!name.startsWith('@')) return [name]
+    return readdirSync(join(modules, name)).map((scoped) => `${name}/${scoped}`)
+  })
+
+  for (const name of packages) {
+    const home = join(modules, name)
+
+    assert.equal(
+      existsSync(join(home, 'binding.gyp')),
+      false,
+      `${name} needs a native build, so Node alone would not be enough`,
+    )
+
+    const manifestPath = join(home, 'package.json')
+    if (!existsSync(manifestPath)) continue
+
+    const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
+    assert.ok(
+      !manifest.scripts?.install && !manifest.scripts?.postinstall,
+      `${name} runs an install script, which may need a toolchain`,
+    )
+  }
+}
+
+/**
  * Starts the application on an ephemeral port so tests never contend for a
  * fixed one, and hands back the address it actually bound to.
  */
 const startOnEphemeralPort = async () => {
+  // Point the Gallery at a throwaway store. Without this the first request
+  // opens the default one and creates data/ inside the repository.
+  const directory = mkdtempSync(join(tmpdir(), 'photo-boot-'))
+  const store = openStore({ directory })
+  useStore(store)
+
   const server = createServer()
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve))
   const { address, port } = server.address()
@@ -23,7 +68,11 @@ const startOnEphemeralPort = async () => {
     address,
     port,
     origin: `http://127.0.0.1:${port}`,
-    stop: () => new Promise((resolve) => server.close(resolve)),
+    stop: async () => {
+      await new Promise((resolve) => server.close(resolve))
+      await store.close()
+      rmSync(directory, { recursive: true, force: true })
+    },
   }
 }
 
@@ -44,12 +93,7 @@ test('starts and serves the home page with Node as the only language runtime', a
     await app.stop()
   }
 
-  const pkg = readPackageJson()
-  assert.deepEqual(
-    Object.keys(pkg.dependencies ?? {}),
-    [],
-    'a runtime dependency would mean something beyond Node is needed to run this',
-  )
+  assertNoDependencyNeedsAToolchain()
 })
 
 // @covers REQ-PHOTO-013@v1
@@ -88,9 +132,7 @@ test('home page is reachable from the same PC and returns a successful response'
 
 // @covers REQ-PHOTO-014@v1
 test('starts from a clean checkout with no database server, container runtime or cloud service', async () => {
-  const pkg = readPackageJson()
-  assert.deepEqual(Object.keys(pkg.dependencies ?? {}), [])
-  assert.deepEqual(Object.keys(pkg.optionalDependencies ?? {}), [])
+  assertNoDependencyNeedsAToolchain()
 
   for (const infrastructureFile of [
     'Dockerfile',

@@ -56,3 +56,6 @@ desktop.ini
 **/.next/**
 **/coverage/**
 **/playwright-report/**
+
+# --- stored Photos (REQ-PHOTO-012) ---
+data/
