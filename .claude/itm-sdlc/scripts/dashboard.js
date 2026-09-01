@@ -554,26 +554,14 @@ function renderHtml(data) {
   </div>
 
   <div class="tabs" role="tablist" aria-label="Dashboard sections">
-    <button type="button" role="tab" class="tab on" data-tab="slices" aria-selected="true">Delivery slices <b>${slices.slices.length}</b></button>
-    <button type="button" role="tab" class="tab" data-tab="reqs" aria-selected="false">Requirements <b>${data.counts.requirements}</b></button>
+    <button type="button" role="tab" class="tab on" data-tab="reqs" aria-selected="true">Requirements <b>${data.counts.requirements}</b></button>
+    <button type="button" role="tab" class="tab" data-tab="slices" aria-selected="false">Task Sequence <b>${slices.slices.length}</b></button>
     <button type="button" role="tab" class="tab" data-tab="records" aria-selected="false">Records <b>${data.counts.feedback + data.counts.decisions + data.counts.changes}</b></button>
   </div>
 
   <div class="board">
     <div class="board-main">
-      <section class="tab-panel" data-panel="slices" role="tabpanel">
-        <h2>Delivery slices <span class="count">${slices.slices.length}</span></h2>
-        ${sliceNote}
-        <div class="table-wrap">
-          <table class="slices">
-            <thead><tr><th>#</th><th>Slice</th><th>Covers</th><th>Branch</th><th>Status</th></tr></thead>
-            <tbody>${sliceRows || '<tr><td colspan="5">No slices defined.</td></tr>'}</tbody>
-          </table>
-        </div>
-        ${unplanned}
-      </section>
-
-      <section class="tab-panel grow" data-panel="reqs" role="tabpanel" hidden>
+      <section class="tab-panel grow" data-panel="reqs" role="tabpanel">
         <div class="split">
           <section>
             <h2>Status</h2>
@@ -598,6 +586,18 @@ function renderHtml(data) {
           </div>
           ${pager("Requirements")}
         </div>
+      </section>
+
+      <section class="tab-panel" data-panel="slices" role="tabpanel" hidden>
+        <h2>Task Sequence <span class="count">${slices.slices.length}</span></h2>
+        ${sliceNote}
+        <div class="table-wrap">
+          <table class="slices">
+            <thead><tr><th>#</th><th>Slice</th><th>Covers</th><th>Branch</th><th>Status</th></tr></thead>
+            <tbody>${sliceRows || '<tr><td colspan="5">No slices defined.</td></tr>'}</tbody>
+          </table>
+        </div>
+        ${unplanned}
       </section>
 
       <section class="tab-panel" data-panel="records" role="tabpanel" hidden>
