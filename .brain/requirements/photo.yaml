@@ -92,7 +92,9 @@
   title: Home page carries a control labelled "+ Upload Photo"
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/upload-modal.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): the sentence beginning "Add an"
@@ -113,7 +115,9 @@
   title: The upload control opens a modal over the home page without navigating away
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/upload-modal.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "a button on the home page that
@@ -146,7 +150,10 @@
   title: The upload modal lets a person choose an image file from their own computer
   module: PHOTO
   priority: must
-  status: agreed
+  status: verified
+  verified_by:
+    - tests/upload-modal.test.js
+    - tests/upload-rules.test.js
   version: 1
   source: >-
     Client email, KCB, Sep-01-2026 (BRIEF.md): "where users can choose an image
