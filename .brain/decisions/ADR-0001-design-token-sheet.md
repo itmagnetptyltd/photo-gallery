@@ -1,7 +1,9 @@
 # ADR-0001 — The Gallery is built from one design token sheet
 
-- **Status:** proposed <!-- awaiting KCB approval; see "How this is approved" -->
+- **Status:** accepted
 - **Date:** 2026-09-01
+- **Approved:** KCB, Sep-01-2026 — the single round of approval answer 30 asks
+  for. Approved as proposed, with no value changed.
 - **Governs:** src/public/gallery.css, src/home-page.js
 
 ## Context
@@ -209,3 +211,10 @@ On approval, this record's status moves `proposed` → `accepted` in the pull
 request that carries it, and `/tdd` becomes runnable for slice 8. If KCB changes
 a value, the change is made here before any code is written — that is the whole
 point of approving the sheet rather than the stylesheet.
+
+**Approved by KCB on Sep-01-2026**, as proposed and with no value changed. That
+satisfies REQ-PHOTO-016@v1 criterion 4, and slice 8 began against this sheet.
+
+From this point the sheet is the acceptance baseline. A later change to any value
+here is a variation under answer 29 — `/find-variation` — not a defect, and this
+record is superseded by a new ADR rather than edited.
