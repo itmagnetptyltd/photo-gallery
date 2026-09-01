@@ -99,9 +99,31 @@ demo.
 Open. Awaiting a human triage decision — classification carries commercial
 consequences and has deliberately not been applied.
 
-If confirmed as a variation, the route is `/find-variation` and then
-`/change-record` against REQ-PHOTO-011@v1, which is currently `verified`.
-Changing what it means requires a new version and a `CHG-` record, not an edit.
+`/find-variation` was run on 2026-09-01. It split this feedback into four asks
+and had `variation-agent` judge each against the agreed text alone:
+
+| Ask | Coverage verdict | Works today | Classification |
+|---|---|---|---|
+| Make it professional and attractive | `not-covered` | — | **variation** — see CHG-0001 |
+| Tiles clipped differently from one another | `partial` | required half passes | **escalate** |
+| Spacing is uniform | `covered` REQ-PHOTO-011@v1 c3 | yes | **already-agreed** |
+| "+ Upload Photo" sits clear | `covered` REQ-PHOTO-011@v1 c2, c3 | yes | **already-agreed** |
+
+**One correction to the check recorded above.** This record answered "are all
+tiles the same size?" with "yes, by construction", which is true but answers the
+wrong question. `variation-agent` found that **no criterion requires tiles to be
+the same size** — REQ-PHOTO-011@v1 criterion 3 requires uniform *spacing*, not
+uniform size, and nothing else addresses it. The property holds today and is
+unprotected: no test would catch it regressing.
+
+**And one to the triage proposed above.** This record proposed the clipping
+observation was "not a defect on current evidence". That should be read as
+**escalate**, not as settled. The measured thumbnail geometry does explain the
+differing crops, but the agreed text does not distinguish between an image
+bypassing the tile-dimension rule (which REQ-PHOTO-002@v1 criterion 1 would
+require fixing, free) and differing source aspect ratios cropped differently
+inside correctly-sized tiles (which no criterion covers). A person decides which
+reading applies before anything is promised.
 
 Attribution is incomplete: neither the speaker nor the channel was stated. A
 feedback record that may become a commercial argument should carry both, and
